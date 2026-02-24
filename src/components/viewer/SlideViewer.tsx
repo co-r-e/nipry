@@ -1,13 +1,16 @@
 "use client";
 
 import { useCallback } from "react";
+import { PanelRight } from "lucide-react";
 import type { Deck } from "@/types/deck";
 import { SLIDE_WIDTH, SLIDE_HEIGHT, resolveSlideBackground } from "@/lib/slide-utils";
 import { Sidebar } from "@/components/sidebar/Sidebar";
 import { SlideContent } from "@/components/slide/SlideContent";
 import { SlideOverlay } from "@/components/slide/SlideOverlay";
+import { NotesPanel } from "@/components/viewer/NotesPanel";
 import { useDeckNavigation } from "@/hooks/useDeckNavigation";
 import { useSlideScale } from "@/hooks/useSlideScale";
+import { useResizablePanel } from "@/hooks/useResizablePanel";
 
 interface SlideViewerProps {
   deck: Deck;
@@ -15,6 +18,7 @@ interface SlideViewerProps {
 
 export function SlideViewer({ deck }: SlideViewerProps) {
   const { containerRef, scale } = useSlideScale({ padding: 64 });
+  const { width, isOpen, toggle, resizeHandleProps } = useResizablePanel();
 
   const { currentSlide, handleNavigate } = useDeckNavigation({
     deckName: deck.name,
@@ -42,7 +46,7 @@ export function SlideViewer({ deck }: SlideViewerProps) {
 
       <main
         ref={containerRef}
-        className="flex flex-1 items-center justify-center bg-[#F0F2F5] overflow-hidden"
+        className="relative flex flex-1 items-center justify-center bg-[#F0F2F5] overflow-hidden"
       >
         <div
           className="shadow-xl"
@@ -69,7 +73,26 @@ export function SlideViewer({ deck }: SlideViewerProps) {
             />
           </div>
         </div>
+
+        {/* Toggle button when notes panel is closed */}
+        {!isOpen && (
+          <button
+            onClick={toggle}
+            className="absolute right-3 top-3 rounded bg-white/80 p-1.5 text-gray-400 shadow-sm backdrop-blur transition-colors hover:bg-white hover:text-gray-600"
+            aria-label="Open notes panel"
+          >
+            <PanelRight size={18} />
+          </button>
+        )}
       </main>
+
+      <NotesPanel
+        notes={slide.notes}
+        isOpen={isOpen}
+        width={width}
+        onToggle={toggle}
+        resizeHandleProps={resizeHandleProps}
+      />
     </div>
   );
 }
