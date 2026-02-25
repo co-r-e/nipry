@@ -54,8 +54,9 @@ export function Chart({
   if (!data || data.length === 0) {
     return (
       <div
-        className="my-6 flex w-full items-center justify-center text-2xl text-gray-400"
-        style={{ height }}
+        data-growable=""
+        className="flex w-full items-center justify-center text-2xl text-gray-400"
+        style={{ height, margin: "var(--slide-space-sm) 0" }}
       >
         No data
       </div>
@@ -63,7 +64,7 @@ export function Chart({
   }
 
   return (
-    <div className="my-6 w-full" style={{ height }}>
+    <div data-growable="" className="w-full" style={{ height, margin: "var(--slide-space-sm) 0" }}>
       <ResponsiveContainer width="100%" height="100%">
         {renderChart({ type, data, xKey, yKey, colors, animate })}
       </ResponsiveContainer>
@@ -144,7 +145,7 @@ function renderChart({
             nameKey={xKey}
             cx="50%"
             cy="50%"
-            outerRadius={120}
+            outerRadius="80%"
             label
             isAnimationActive={animate}
           >

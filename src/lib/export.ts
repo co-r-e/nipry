@@ -150,11 +150,8 @@ export async function captureSlide(container: HTMLElement): Promise<string> {
     height: SLIDE_HEIGHT,
     pixelRatio: 1,
     cacheBust: true,
-    filter: (node) => {
-      if (node instanceof HTMLIFrameElement) return false;
-      if (node instanceof HTMLVideoElement) return false;
-      return true;
-    },
+    filter: (node) =>
+      !(node instanceof HTMLIFrameElement || node instanceof HTMLVideoElement),
   });
 }
 
@@ -401,9 +398,9 @@ async function imgToDataUrl(url: string): Promise<string> {
   }
 }
 
-/** Strip `#` prefix for pptxgenjs color values. */
+/** Strip leading `#` for pptxgenjs color values. */
 function stripHash(hex: string): string {
-  return hex.replace("#", "");
+  return hex.startsWith("#") ? hex.slice(1) : hex;
 }
 
 type PptxAlign = "left" | "center" | "right";
@@ -415,10 +412,19 @@ function resolveAlignment(position: string): PptxAlign {
   return "left";
 }
 
-function getAlignOffset(align: PptxAlign, rightOffset: number, centerOffset: number): number {
-  if (align === "right") return rightOffset;
-  if (align === "center") return centerOffset;
-  return 0;
+function getAlignOffset(
+  align: PptxAlign,
+  rightOffset: number,
+  centerOffset: number,
+): number {
+  switch (align) {
+    case "right":
+      return rightOffset;
+    case "center":
+      return centerOffset;
+    case "left":
+      return 0;
+  }
 }
 
 function resolveOverlayPosition(position: string, isFooter: boolean): PptxPos {
@@ -643,7 +649,8 @@ export async function saveNativePptx(
     // Overlay: page number
     if (config.pageNumber) {
       const isHiddenCover =
-        config.pageNumber.hideOnCover !== false && slideData.slideType === "cover";
+        config.pageNumber.hideOnCover !== false &&
+        (slideData.slideType === "cover" || slideData.slideType === "ending");
       if (!isHiddenCover) {
         const pos = resolveOverlayPosition(config.pageNumber.position, true);
         const pageNum = slideData.slideIndex + (config.pageNumber.startFrom ?? 1);

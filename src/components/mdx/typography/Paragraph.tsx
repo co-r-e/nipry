@@ -7,5 +7,11 @@ import type { ComponentPropsWithoutRef } from "react";
 // <span> is phrasing content (valid inside <p>) and with display:block
 // behaves visually identical to a block element.
 export function SlideParagraph(props: ComponentPropsWithoutRef<"span">) {
-  return <span className="mb-6 block text-4xl leading-relaxed" {...props} />;
+  return (
+    <span
+      className="block text-[2rem]"
+      style={{ lineHeight: "var(--slide-body-leading)", marginBottom: "var(--slide-space-sm)" }}
+      {...props}
+    />
+  );
 }

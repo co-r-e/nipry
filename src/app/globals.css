@@ -14,6 +14,37 @@ body {
   background: var(--color-ice-gray);
   color: #1a1a1a;
   font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Reset inline code styles inside pre blocks (terminal) */
+pre code {
+  background: transparent !important;
+  color: inherit !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  font-size: inherit !important;
+  font-weight: normal !important;
+}
+
+/* Table alternating rows */
+[data-slide-content] table tbody tr:nth-child(even) td {
+  background: var(--slide-surface, #f8f9fa);
+}
+
+/* ── Growable elements fill remaining space in flex-col containers ── */
+[data-mdx-status] > [data-growable],
+[data-column] > [data-growable] {
+  flex: 1;
+  min-height: 0;
+}
+
+/* Column: flex-col, natural height + consistent gap */
+[data-vertical-align="center"] [data-column] {
+  display: flex;
+  flex-direction: column;
+  gap: var(--slide-space-lg);
 }
 
 .export-capture,

@@ -1,18 +1,33 @@
 import type { MDXComponents } from "mdx/types";
+
 import { SlideH1, SlideH2, SlideH3 } from "./typography/Headings";
-import { SlideParagraph } from "./typography/Paragraph";
 import { SlideBlockquote } from "./typography/Blockquote";
+import { SlideHr, SlideAnchor } from "./typography/InlineElements";
+import { SlideUl, SlideOl, SlideLi } from "./typography/Lists";
+import { SlideParagraph } from "./typography/Paragraph";
 import { SlideCode, SlidePreCode } from "./CodeBlock";
 import { SlideImage } from "./SlideImage";
 import { SlideTable, SlideTh, SlideTd } from "./SlideTable";
+
+import { CardGrid } from "./layout/CardGrid";
+import { Center } from "./layout/Center";
 import { Columns, Column } from "./layout/Columns";
+
+import { Badge } from "./Badge";
+import { Callout } from "./Callout";
+import { Card } from "./Card";
 import { Chart } from "./Chart";
+import { Divider } from "./Divider";
+import { Fragment } from "./Fragment";
 import { Icon } from "./Icon";
 import { Shape } from "./Shape";
+import { Stat } from "./Stat";
+import { Steps, Step } from "./Steps";
+import { Timeline, TimelineItem } from "./Timeline";
 import { Video } from "./Video";
-import { Fragment } from "./Fragment";
 
 export const slideComponents: MDXComponents = {
+  // Typography
   h1: SlideH1,
   h2: SlideH2,
   h3: SlideH3,
@@ -24,20 +39,27 @@ export const slideComponents: MDXComponents = {
   table: SlideTable,
   th: SlideTh,
   td: SlideTd,
-  ul: (props) => <ul className="mb-6 list-disc space-y-3 pl-12 text-4xl" {...props} />,
-  ol: (props) => <ol className="mb-6 list-decimal space-y-3 pl-12 text-4xl" {...props} />,
-  li: (props) => <li className="leading-relaxed" {...props} />,
-  hr: () => <hr className="my-8 border-t-2 border-gray-200" />,
-  a: (props) => (
-    <a
-      className="text-4xl underline decoration-2 underline-offset-4"
-      style={{ color: "var(--slide-primary)" }}
-      {...props}
-    />
-  ),
-  // Custom components (available in MDX as <ComponentName />)
+  ul: SlideUl,
+  ol: SlideOl,
+  li: SlideLi,
+  hr: SlideHr,
+  a: SlideAnchor,
+  // Layout
   Columns,
   Column,
+  Center,
+  CardGrid,
+  // Content
+  Card,
+  Stat,
+  Timeline,
+  TimelineItem,
+  Steps,
+  Step,
+  Callout,
+  Badge,
+  Divider,
+  // Media & Data
   Chart,
   Icon,
   Shape,

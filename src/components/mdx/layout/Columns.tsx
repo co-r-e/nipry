@@ -5,9 +5,9 @@ interface ColumnsProps {
   gap?: string;
 }
 
-export function Columns({ children, gap = "2rem" }: ColumnsProps) {
+export function Columns({ children, gap = "var(--slide-space-lg)" }: ColumnsProps) {
   return (
-    <div className="flex h-full w-full" style={{ gap }}>
+    <div data-growable="" className="flex h-full w-full" style={{ gap }}>
       {children}
     </div>
   );
@@ -20,7 +20,7 @@ interface ColumnProps {
 
 export function Column({ children, width }: ColumnProps) {
   return (
-    <div className="flex-1" style={width ? { flex: `0 0 ${width}` } : undefined}>
+    <div data-column="" className="flex-1" style={width ? { flex: `0 0 ${width}` } : undefined}>
       {children}
     </div>
   );

@@ -2,6 +2,12 @@
 
 A slide presentation tool built with Next.js and MDX. Author your slides from the CLI using tools like Claude Code or Codex, and view them in the browser with a PowerPoint-like sidebar layout.
 
+> **nipry is an AI-driven slide authoring tool.** The web UI is view-only — all slide creation and editing is done through AI coding agents.
+>
+> - **AI-first workflow** -- Slides are always created and modified via AI agents such as [Claude Code](https://docs.anthropic.com/en/docs/claude-code) or [Codex](https://openai.com/index/codex/). The browser is purely for previewing and presenting.
+> - **Small edits, too** -- Even minor tweaks (typo fixes, color changes, reordering slides) are delegated to the AI rather than edited by hand.
+> - **Voice input recommended** -- Pair with a voice input tool like [Aqua Voice](https://withaqua.com/) for a hands-free, conversational workflow. Describe what you want and let the AI handle the rest.
+
 ## Features
 
 - **MDX slides** -- Write slides as individual `.mdx` files with full Markdown + JSX support

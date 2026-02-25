@@ -2,7 +2,20 @@ import fs from "node:fs/promises";
 import matter from "gray-matter";
 import type { SlideFrontmatter, SlideData, SlideType } from "@/types/deck";
 
-const VALID_SLIDE_TYPES = new Set<string>(["cover", "section", "content"]);
+const VALID_SLIDE_TYPES: Set<string> = new Set<SlideType>([
+  "cover",
+  "section",
+  "content",
+  "comparison",
+  "stats",
+  "timeline",
+  "image-left",
+  "image-right",
+  "image-full",
+  "quote",
+  "agenda",
+  "ending",
+]);
 
 export async function processSlideFile(
   filePath: string,
@@ -34,6 +47,7 @@ export async function processSlideFile(
       transition: frontmatter.transition,
       notes: frontmatter.notes,
       background: frontmatter.background,
+      verticalAlign: frontmatter.verticalAlign as SlideFrontmatter["verticalAlign"],
     },
     rawContent: content,
     notes: frontmatter.notes,

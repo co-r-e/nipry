@@ -16,6 +16,7 @@
  */
 
 import { GoogleGenAI } from "@google/genai";
+import { execSync } from "child_process";
 import * as fs from "fs";
 import * as path from "path";
 
@@ -36,7 +37,14 @@ function loadEnvLocal(): void {
         const eqIndex = trimmed.indexOf("=");
         if (eqIndex === -1) continue;
         const key = trimmed.slice(0, eqIndex).trim();
-        const value = trimmed.slice(eqIndex + 1).trim();
+        let value = trimmed.slice(eqIndex + 1).trim();
+        // Strip surrounding quotes (single or double)
+        if (
+          (value.startsWith('"') && value.endsWith('"')) ||
+          (value.startsWith("'") && value.endsWith("'"))
+        ) {
+          value = value.slice(1, -1);
+        }
         if (!process.env[key]) {
           process.env[key] = value;
         }
@@ -175,15 +183,54 @@ async function generateImage(args: Args): Promise<void> {
     process.exit(1);
   }
 
+  // Validate the returned MIME type
+  const returnedMime = imagePart.inlineData.mimeType;
+  if (returnedMime && returnedMime !== "image/png") {
+    process.stderr.write(
+      `Warning: Requested image/png but received ${returnedMime}. Attempting to save anyway.\n`,
+    );
+  }
+
   // Ensure output directory exists
   const outputDir = path.dirname(args.output);
   if (outputDir && !fs.existsSync(outputDir)) {
     fs.mkdirSync(outputDir, { recursive: true });
   }
 
-  // Write image file
+  // Decode and validate image data
   const imageBuffer = Buffer.from(imagePart.inlineData.data, "base64");
-  fs.writeFileSync(args.output, imageBuffer);
+  if (imageBuffer.length === 0) {
+    process.stderr.write("Error: Decoded image data is empty\n");
+    process.exit(1);
+  }
+
+  // Check PNG magic bytes — if not PNG, convert using sips (macOS) or save as-is
+  const PNG_MAGIC = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]);
+  const isPng = imageBuffer.length >= 8 && imageBuffer.subarray(0, 8).equals(PNG_MAGIC);
+
+  if (!isPng && args.output.endsWith(".png")) {
+    process.stderr.write(
+      `Info: Gemini returned non-PNG data (MIME: ${returnedMime || "unknown"}). Converting to PNG...\n`,
+    );
+    // Save raw data to a temp file, then convert with sips (macOS built-in)
+    const tmpPath = args.output + ".tmp";
+    fs.writeFileSync(tmpPath, imageBuffer);
+    try {
+      execSync(`sips -s format png "${tmpPath}" --out "${args.output}"`, {
+        stdio: "pipe",
+      });
+      fs.unlinkSync(tmpPath);
+      process.stderr.write("Info: Successfully converted to PNG.\n");
+    } catch {
+      // sips not available (non-macOS) — rename tmp to output as-is
+      fs.renameSync(tmpPath, args.output);
+      process.stderr.write(
+        "Warning: Could not convert to PNG (sips not available). File saved with original format.\n",
+      );
+    }
+  } else {
+    fs.writeFileSync(args.output, imageBuffer);
+  }
 
   // Output absolute path to stdout
   const absolutePath = path.resolve(args.output);

@@ -60,8 +60,8 @@ export async function GET(
   const bg = resolveSlideBackground(slide.frontmatter, deck.config);
   const theme: Theme = {
     bg,
-    textColor: deck.config.theme.colors.text || "#1a1a1a",
-    primaryColor: deck.config.theme.colors.primary || "#000000",
+    textColor: deck.config.theme.colors.text ?? "#1a1a1a",
+    primaryColor: deck.config.theme.colors.primary ?? "#000000",
   };
 
   let blocks: ContentBlock[];
@@ -76,8 +76,8 @@ export async function GET(
 
   try {
     return new ImageResponse(renderSlide(blocks, theme), {
-      width: 1920,
-      height: 1080,
+      width: 960,
+      height: 540,
     });
   } catch (e) {
     return new Response(
@@ -98,12 +98,12 @@ function renderSlide(
   return (
     <div
       style={{
-        width: 1920,
-        height: 1080,
+        width: 960,
+        height: 540,
         display: "flex",
         flexDirection: "column",
         background: theme.bg,
-        padding: "80px 72px 64px",
+        padding: "40px 36px 32px",
         color: theme.textColor,
         fontFamily: "sans-serif",
         overflow: "hidden",
@@ -123,19 +123,19 @@ function renderBlock(
 ): React.ReactElement | null {
   switch (block.type) {
     case "heading": {
-      const sizes: Record<number, number> = { 1: 64, 2: 48, 3: 36 };
+      const sizes: Record<number, number> = { 1: 32, 2: 24, 3: 18 };
       return (
         <div
           key={key}
           style={{
             display: "flex",
-            marginBottom: 16,
+            marginBottom: 8,
             flexShrink: 0,
           }}
         >
           <span
             style={{
-              fontSize: sizes[block.level] || 36,
+              fontSize: sizes[block.level] || 18,
               fontWeight: 700,
               lineHeight: 1.2,
             }}
@@ -152,11 +152,11 @@ function renderBlock(
           key={key}
           style={{
             display: "flex",
-            marginBottom: 12,
+            marginBottom: 6,
             flexShrink: 0,
           }}
         >
-          <span style={{ fontSize: 28, lineHeight: 1.5 }}>{block.text}</span>
+          <span style={{ fontSize: 14, lineHeight: 1.5 }}>{block.text}</span>
         </div>
       );
 
@@ -167,14 +167,14 @@ function renderBlock(
           style={{
             display: "flex",
             flexDirection: "column",
-            marginBottom: 12,
-            paddingLeft: 32,
+            marginBottom: 6,
+            paddingLeft: 16,
             flexShrink: 0,
           }}
         >
           {block.items.map((item, j) => (
-            <div key={j} style={{ display: "flex", marginBottom: 6 }}>
-              <span style={{ fontSize: 28, lineHeight: 1.5 }}>
+            <div key={j} style={{ display: "flex", marginBottom: 3 }}>
+              <span style={{ fontSize: 14, lineHeight: 1.5 }}>
                 {block.ordered ? `${j + 1}. ` : "- "}
                 {item}
               </span>
@@ -223,14 +223,14 @@ function renderBlock(
             alignItems: "center",
             justifyContent: "center",
             flex: 1,
-            minHeight: 100,
-            border: "3px dashed #999",
-            borderRadius: 12,
+            minHeight: 50,
+            border: "2px dashed #999",
+            borderRadius: 6,
             background: "#f0f0f0",
-            margin: "8px 0",
+            margin: "4px 0",
           }}
         >
-          <span style={{ fontSize: 24, color: "#666" }}>
+          <span style={{ fontSize: 12, color: "#666" }}>
             [Image: {block.alt}]
           </span>
         </div>
@@ -245,14 +245,14 @@ function renderBlock(
             alignItems: "center",
             justifyContent: "center",
             flex: 1,
-            minHeight: 80,
-            border: "2px dashed #aaa",
-            borderRadius: 8,
+            minHeight: 40,
+            border: "1px dashed #aaa",
+            borderRadius: 4,
             background: "#fafafa",
-            margin: "8px 0",
+            margin: "4px 0",
           }}
         >
-          <span style={{ fontSize: 22, color: "#888" }}>
+          <span style={{ fontSize: 11, color: "#888" }}>
             [{block.label}]
           </span>
         </div>
@@ -264,13 +264,13 @@ function renderBlock(
           key={key}
           style={{
             display: "flex",
-            borderLeft: `4px solid ${theme.primaryColor}`,
-            paddingLeft: 24,
-            margin: "12px 0",
+            borderLeft: `2px solid ${theme.primaryColor}`,
+            paddingLeft: 12,
+            margin: "6px 0",
             flexShrink: 0,
           }}
         >
-          <span style={{ fontSize: 28, fontStyle: "italic", lineHeight: 1.5 }}>
+          <span style={{ fontSize: 14, fontStyle: "italic", lineHeight: 1.5 }}>
             {block.text}
           </span>
         </div>
@@ -284,15 +284,15 @@ function renderBlock(
             display: "flex",
             flexDirection: "column",
             background: "#1e1e1e",
-            borderRadius: 8,
-            padding: 24,
-            margin: "8px 0",
+            borderRadius: 4,
+            padding: 12,
+            margin: "4px 0",
             flexShrink: 0,
           }}
         >
           <span
             style={{
-              fontSize: 20,
+              fontSize: 10,
               color: "#d4d4d4",
               fontFamily: "monospace",
               lineHeight: 1.4,
@@ -614,9 +614,9 @@ function labelFor(tag: string, fullTag: string): string {
 
 function gapToPx(gap: string): number {
   const match = gap.match(/^(\d+(?:\.\d+)?)\s*(rem|px|em)?$/);
-  if (!match) return 32;
+  if (!match) return 16;
   const value = parseFloat(match[1]);
   const unit = match[2] || "rem";
-  if (unit === "px") return value;
-  return value * 16; // rem/em → px
+  if (unit === "px") return Math.round(value / 2);
+  return value * 8; // rem/em → px (half scale)
 }

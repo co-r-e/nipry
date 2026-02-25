@@ -79,7 +79,7 @@ npx tsx .claude/skills/nanobanana-image/scripts/capture-slide.ts \
 
 #### 技術詳細
 
-- キャプチャ API: `GET /api/capture/{deck}/{slide}` — `next/og`（Satori）を使い、MDX 構造を 1920x1080 PNG にサーバーサイドレンダリング
+- キャプチャ API: `GET /api/capture/{deck}/{slide}` — `next/og`（Satori）を使い、MDX 構造を 960x540 PNG にサーバーサイドレンダリング
 - ブラウザ不要（Playwright/Puppeteer は不要）
 - 画像・チャート等の複雑なコンポーネントはプレースホルダーボックスとして描画される
 - 日本語テキストはフォント制限により正確に表示されない場合があるが、レイアウト分析には影響なし

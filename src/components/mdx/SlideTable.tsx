@@ -2,8 +2,12 @@ import type { ComponentPropsWithoutRef } from "react";
 
 export function SlideTable(props: ComponentPropsWithoutRef<"table">) {
   return (
-    <div className="my-6 overflow-x-auto">
-      <table className="w-full border-collapse text-3xl" {...props} />
+    <div
+      data-growable=""
+      className="overflow-x-auto rounded-xl"
+      style={{ border: "1px solid var(--slide-border)", margin: "var(--slide-space-sm) 0" }}
+    >
+      <table className="w-full border-collapse text-[1.75rem]" {...props} />
     </div>
   );
 }
@@ -11,8 +15,12 @@ export function SlideTable(props: ComponentPropsWithoutRef<"table">) {
 export function SlideTh(props: ComponentPropsWithoutRef<"th">) {
   return (
     <th
-      className="border-b-2 px-6 py-4 text-left font-semibold text-white"
-      style={{ backgroundColor: "var(--slide-primary)" }}
+      className="px-8 py-5 text-left text-[1.5rem] font-semibold uppercase tracking-wider"
+      style={{
+        background: "var(--slide-surface)",
+        color: "var(--slide-text-muted)",
+        borderBottom: "2px solid var(--slide-border)",
+      }}
       {...props}
     />
   );
@@ -21,7 +29,11 @@ export function SlideTh(props: ComponentPropsWithoutRef<"th">) {
 export function SlideTd(props: ComponentPropsWithoutRef<"td">) {
   return (
     <td
-      className="border-b border-gray-200 px-6 py-4 even:bg-gray-50"
+      className="px-8 py-5"
+      style={{
+        borderBottom: "1px solid var(--slide-border-light)",
+        color: "var(--slide-text)",
+      }}
       {...props}
     />
   );

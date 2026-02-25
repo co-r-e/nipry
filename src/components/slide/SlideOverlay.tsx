@@ -1,6 +1,6 @@
 "use client";
 
-import type { DeckConfig, LogoPosition, FooterPosition, SlideType } from "@/types/deck";
+import type { DeckConfig, LogoPosition, SlideType } from "@/types/deck";
 import { cn } from "@/lib/utils";
 
 interface SlideOverlayProps {
@@ -10,15 +10,23 @@ interface SlideOverlayProps {
   deckName: string;
 }
 
-const positionClasses: Record<LogoPosition | FooterPosition, string> =
-  {
-    "top-left": "top-[24px] left-[40px]",
-    "top-center": "top-[24px] left-1/2 -translate-x-1/2",
-    "top-right": "top-[24px] right-[40px]",
-    "bottom-left": "bottom-[24px] left-[40px]",
-    "bottom-center": "bottom-[24px] left-1/2 -translate-x-1/2",
-    "bottom-right": "bottom-[24px] right-[40px]",
-  };
+const positionClasses: Record<LogoPosition, string> = {
+  "top-left": "top-[24px] left-[40px]",
+  "top-center": "top-[24px] left-1/2 -translate-x-1/2",
+  "top-right": "top-[24px] right-[40px]",
+  "bottom-left": "bottom-[24px] left-[40px]",
+  "bottom-center": "bottom-[24px] left-1/2 -translate-x-1/2",
+  "bottom-right": "bottom-[24px] right-[40px]",
+};
+
+function resolveAssetPath(src: string, deckName: string): string {
+  if (src.startsWith("http") || src.startsWith("/")) return src;
+  const encoded = encodeURIComponent(deckName);
+  if (src.startsWith("./assets/")) {
+    return `/api/decks/${encoded}/${src.slice(2)}`;
+  }
+  return `/api/decks/${encoded}/assets/${src}`;
+}
 
 export function SlideOverlay({
   config,
@@ -27,7 +35,7 @@ export function SlideOverlay({
   deckName,
 }: SlideOverlayProps): React.JSX.Element {
   const { logo, copyright, pageNumber } = config;
-  const isCover = slideType === "cover";
+  const isCover = slideType === "cover" || slideType === "ending";
   const showPageNumber =
     pageNumber && !(isCover && (pageNumber.hideOnCover ?? true));
 
@@ -69,13 +77,4 @@ export function SlideOverlay({
       )}
     </>
   );
-}
-
-function resolveAssetPath(src: string, deckName: string): string {
-  if (src.startsWith("http") || src.startsWith("/")) return src;
-  const encoded = encodeURIComponent(deckName);
-  if (src.startsWith("./assets/")) {
-    return `/api/decks/${encoded}/${src.slice(2)}`;
-  }
-  return `/api/decks/${encoded}/assets/${src}`;
 }

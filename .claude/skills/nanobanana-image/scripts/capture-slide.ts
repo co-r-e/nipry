@@ -72,11 +72,35 @@ async function main(): Promise<void> {
   const args = parseArgs();
   const url = `http://localhost:${args.port}/api/capture/${args.deck}/${args.slide}`;
 
-  const res = await fetch(url);
+  let res: Response;
+  try {
+    res = await fetch(url);
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : String(err);
+    if (msg.includes("ECONNREFUSED") || msg.includes("fetch failed")) {
+      process.stderr.write(
+        `Error: Could not connect to dev server at localhost:${args.port}. ` +
+        `Make sure it is running with: npm run dev\n`,
+      );
+    } else {
+      process.stderr.write(`Error: ${msg}\n`);
+    }
+    process.exit(1);
+  }
 
   if (!res.ok) {
     const text = await res.text();
     process.stderr.write(`Error: ${res.status} — ${text}\n`);
+    process.exit(1);
+  }
+
+  // Validate that the response is actually an image
+  const contentType = res.headers.get("content-type") || "";
+  if (!contentType.startsWith("image/")) {
+    process.stderr.write(
+      `Error: Expected image response but received Content-Type: ${contentType}. ` +
+      `The capture API may have returned an error page.\n`,
+    );
     process.exit(1);
   }
 
