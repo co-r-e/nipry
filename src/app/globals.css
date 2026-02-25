@@ -33,6 +33,11 @@ pre code {
   background: var(--slide-surface, #f8f9fa);
 }
 
+/* ── KaTeX block math: use slide spacing instead of default 1em ── */
+[data-mdx-status] .katex-display {
+  margin: var(--slide-space-sm) 0;
+}
+
 /* ── Growable elements fill remaining space in flex-col containers ── */
 [data-mdx-status] > [data-growable],
 [data-column] > [data-growable] {

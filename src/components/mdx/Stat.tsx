@@ -1,29 +1,23 @@
-"use client";
-
-import { cn } from "@/lib/utils";
-import { Icon } from "./Icon";
-
 interface StatProps {
   value: string;
   label: string;
-  icon?: string;
   trend?: "up" | "down";
   size?: "sm" | "md" | "lg";
 }
 
 const sizeConfig = {
-  sm: { value: "text-[2.5rem]", label: "text-[1.3rem]", icon: 40 },
-  md: { value: "text-[3.2rem]", label: "text-[1.5rem]", icon: 48 },
-  lg: { value: "text-[5rem]", label: "text-[2rem]", icon: 64 },
+  sm: { value: "text-[2.5rem]", label: "text-[1.8rem]" },
+  md: { value: "text-[3.2rem]", label: "text-[1.8rem]" },
+  lg: { value: "text-[5rem]", label: "text-[2rem]" },
 };
 
 const trendIndicator: Record<string, string> = {
-  up: "↑ ",
-  down: "↓ ",
+  up: "\u2191 ",
+  down: "\u2193 ",
 };
 
-export function Stat({ value, label, icon, trend, size = "md" }: StatProps) {
-  const sizeStyles = sizeConfig[size];
+export function Stat({ value, label, trend, size = "md" }: StatProps) {
+  const s = sizeConfig[size];
 
   return (
     <div
@@ -34,20 +28,15 @@ export function Stat({ value, label, icon, trend, size = "md" }: StatProps) {
         borderRadius: "var(--slide-radius)",
       }}
     >
-      {icon && (
-        <span style={{ color: "var(--slide-primary)" }}>
-          <Icon name={icon} size={sizeStyles.icon} />
-        </span>
-      )}
       <p
-        className={cn(sizeStyles.value, "mt-3 mb-1 font-bold leading-none")}
+        className={`${s.value} mb-1 font-bold leading-none`}
         style={{ color: "var(--slide-primary)" }}
       >
         {trend && trendIndicator[trend]}
         {value}
       </p>
       <p
-        className={sizeStyles.label}
+        className={s.label}
         style={{ color: "var(--slide-text-muted)" }}
       >
         {label}

@@ -6,7 +6,11 @@ interface StepsProps {
 
 export function Steps({ children }: StepsProps) {
   return (
-    <div className="mt-8 flex flex-1 items-center gap-10">
+    <div
+      data-growable=""
+      className="flex flex-1 items-center gap-10"
+      style={{ marginTop: "var(--slide-space-sm)" }}
+    >
       {children}
     </div>
   );
@@ -42,7 +46,7 @@ export function Step({ number, title, children }: StepProps) {
       </h3>
       {children && (
         <div
-          className="mt-3 text-[1.5rem]"
+          className="mt-3 text-[1.8rem]"
           style={{ color: "var(--slide-text-muted)", lineHeight: "1.6" }}
         >
           {children}

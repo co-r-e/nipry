@@ -56,7 +56,7 @@ export function Chart({
       <div
         data-growable=""
         className="flex w-full items-center justify-center text-2xl text-gray-400"
-        style={{ height, margin: "var(--slide-space-sm) 0" }}
+        style={{ minHeight: height, margin: "var(--slide-space-sm) 0" }}
       >
         No data
       </div>
@@ -64,7 +64,7 @@ export function Chart({
   }
 
   return (
-    <div data-growable="" className="w-full" style={{ height, margin: "var(--slide-space-sm) 0" }}>
+    <div data-growable="" className="w-full" style={{ minHeight: height, margin: "var(--slide-space-sm) 0" }}>
       <ResponsiveContainer width="100%" height="100%">
         {renderChart({ type, data, xKey, yKey, colors, animate })}
       </ResponsiveContainer>

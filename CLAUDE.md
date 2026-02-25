@@ -79,6 +79,17 @@ accent_color:
     - Multiple accent colors compete for attention and weaken visual hierarchy.
     - Use color intensity (opacity, lighter/darker shades of the same hue) for variation instead.
 
+no_side_accent_borders:
+  rule: Never add a thick colored border on one side of a box
+  reason: >
+    One-sided accent borders (e.g., border-left: 4px solid <color>) are an overused
+    AI-generated design cliché. They add visual noise without conveying information.
+  use_instead:
+    - Full uniform border (border: 1px solid) for outlined containers
+    - Background color for emphasis
+    - No border at all for clean, minimal boxes
+  exception: Timeline vertical lines where the line represents a chronological axis
+
 icon_usage:
   rule: Only use icons when they accurately convey meaning. Never use icons "just because."
   allowed:
