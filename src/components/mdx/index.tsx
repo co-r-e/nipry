@@ -16,6 +16,7 @@ import { Columns, Column } from "./layout/Columns";
 import { Badge } from "./Badge";
 import { Callout } from "./Callout";
 import { Card } from "./Card";
+import { TaggedCard } from "./TaggedCard";
 import { Chart } from "./Chart";
 import { Divider } from "./Divider";
 import { Fragment } from "./Fragment";
@@ -51,6 +52,7 @@ export const slideComponents: MDXComponents = {
   CardGrid,
   // Content
   Card,
+  TaggedCard,
   Stat,
   Timeline,
   TimelineItem,

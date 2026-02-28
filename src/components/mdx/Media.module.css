@@ -1,0 +1,45 @@
+.image {
+    border-radius: var(--slide-radius, 1rem);
+    object-fit: contain;
+    margin: var(--slide-space-sm) 0;
+}
+
+.videoWrapper {
+    margin: var(--slide-space-sm) 0;
+    aspect-ratio: 16 / 9;
+    width: 100%;
+    overflow: hidden;
+    border-radius: var(--slide-radius, 1rem);
+}
+
+.videoIframe {
+    height: 100%;
+    width: 100%;
+}
+
+.videoNative {
+    margin: var(--slide-space-sm) 0;
+    max-height: 60%;
+    width: 100%;
+    border-radius: var(--slide-radius, 1rem);
+}
+
+.chartContainer {
+    width: 100%;
+    margin: var(--slide-space-sm) 0;
+}
+
+.chartNoData {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: var(--slide-text-muted);
+    margin: var(--slide-space-sm) 0;
+}
+
+.iconError {
+    color: #ef4444;
+    /* red-500 equivalent */
+}

@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import styles from "./Callout.module.css";
 
 interface CalloutProps {
   title?: string;
@@ -7,28 +8,9 @@ interface CalloutProps {
 
 export function Callout({ title, children }: CalloutProps) {
   return (
-    <div
-      className="rounded-lg"
-      style={{
-        background: "var(--slide-surface)",
-        padding: "var(--slide-space-lg)",
-        margin: "var(--slide-space-sm) 0",
-      }}
-    >
-      {title && (
-        <p
-          className="text-[2rem] font-bold"
-          style={{ color: "var(--slide-text)", marginBottom: "var(--slide-space-xs)" }}
-        >
-          {title}
-        </p>
-      )}
-      <div
-        className="text-[1.8rem]"
-        style={{ color: "var(--slide-text-muted)", lineHeight: "var(--slide-body-leading)" }}
-      >
-        {children}
-      </div>
+    <div className={styles.callout}>
+      {title && <p className={styles.title}>{title}</p>}
+      <div className={styles.content}>{children}</div>
     </div>
   );
 }

@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
+import styles from "./Card.module.css";
 
 type CardVariant = "default" | "filled" | "outlined";
 
@@ -11,35 +12,18 @@ interface CardProps {
   style?: React.CSSProperties;
 }
 
-const variantStyles: Record<CardVariant, React.CSSProperties> = {
-  default: {
-    background: "var(--slide-surface)",
-    border: "1px solid var(--slide-border)",
-  },
-  filled: {
-    background: "var(--slide-primary)",
-    color: "#FFFFFF",
-  },
-  outlined: {
-    background: "transparent",
-    border: "2px solid var(--slide-border)",
-  },
-};
-
 export function Card({
   children,
   variant = "default",
-  padding = "var(--slide-space-lg)",
+  padding,
   className,
   style,
 }: CardProps) {
   return (
     <div
-      className={cn("flex flex-col", className)}
+      className={cn(styles.card, styles[variant], className)}
       style={{
-        borderRadius: "var(--slide-radius)",
-        padding,
-        ...variantStyles[variant],
+        ...(padding ? { padding } : {}),
         ...style,
       }}
     >

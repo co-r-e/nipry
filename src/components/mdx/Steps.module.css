@@ -1,0 +1,45 @@
+.steps {
+    display: flex;
+    flex: 1;
+    align-items: stretch;
+    gap: 2.5rem;
+    margin-top: var(--slide-space-sm);
+}
+
+.step {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    background: var(--slide-surface);
+    border-radius: var(--slide-radius);
+    padding: var(--slide-space-xl) var(--slide-space-lg);
+}
+
+.number {
+    display: flex;
+    height: 5rem;
+    width: 5rem;
+    align-items: center;
+    justify-content: center;
+    border-radius: 9999px;
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #fff;
+    background: var(--slide-primary);
+}
+
+.title {
+    margin-top: 1.25rem;
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--slide-text);
+}
+
+.content {
+    margin-top: 0.75rem;
+    font-size: 1.5rem;
+    color: var(--slide-text-muted);
+    line-height: 1.6;
+}

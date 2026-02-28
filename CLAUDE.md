@@ -31,6 +31,12 @@ slide_layout:
       - All content must fit within the inviolable area. No negative margins to break out (except cover type).
       - Elements with data-growable expand via flex:1 to fill remaining vertical space.
 
+no_tailwind_in_slides:
+  rule: Never use Tailwind CSS utility classes (e.g., className="flex items-center") inside MDX slide files or slide components (/src/components/mdx/).
+  reason: The slide presentation engine has been migrated to a strict CSS Modules + Native CSS Variables architecture to ensure scalable, themeable, 16:9 responsive presentations. Tailwind utility classes break this encapsulation and interfere with dynamic theme variables.
+  use_instead: CSS Modules (*.module.css) for components, and inline styles with CSS variables (e.g., style={{ color: "var(--slide-primary)", display: "flex", alignItems: "center" }}) inside MDX/JSX when one-off styling is needed.
+  scope: Only applies to slide contents and `src/components/mdx`. Non-slide application UI (like the deck listing page in `src/app/page.tsx`) still uses Tailwind.
+
 no_markdown_lists_in_jsx:
   rule: Never use Markdown list syntax (- or 1.) inside JSX components
   reason: Causes MDX parse errors inside <Column>, <Card>, <Center>, <div>, etc.

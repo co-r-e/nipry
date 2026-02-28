@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import styles from "./Steps.module.css";
 
 interface StepsProps {
   children: ReactNode;
@@ -6,11 +7,7 @@ interface StepsProps {
 
 export function Steps({ children }: StepsProps) {
   return (
-    <div
-      data-growable=""
-      className="flex flex-1 items-center gap-10"
-      style={{ marginTop: "var(--slide-space-sm)" }}
-    >
+    <div data-growable="" className={styles.steps}>
       {children}
     </div>
   );
@@ -24,31 +21,15 @@ interface StepProps {
 
 export function Step({ number, title, children }: StepProps) {
   return (
-    <div
-      className="flex flex-1 flex-col items-center text-center"
-      style={{
-        background: "var(--slide-surface)",
-        borderRadius: "var(--slide-radius)",
-        padding: "var(--slide-space-xl) var(--slide-space-lg)",
-      }}
-    >
-      <div
-        className="flex h-20 w-20 items-center justify-center rounded-full text-[2.5rem] font-bold text-white"
-        style={{ background: "var(--slide-primary)" }}
-      >
+    <div className={styles.step}>
+      <div className={styles.number}>
         {number}
       </div>
-      <h3
-        className="mt-5 text-[2rem] font-bold"
-        style={{ color: "var(--slide-text)" }}
-      >
+      <h3 className={styles.title}>
         {title}
       </h3>
       {children && (
-        <div
-          className="mt-3 text-[1.8rem]"
-          style={{ color: "var(--slide-text-muted)", lineHeight: "1.6" }}
-        >
+        <div className={styles.content}>
           {children}
         </div>
       )}

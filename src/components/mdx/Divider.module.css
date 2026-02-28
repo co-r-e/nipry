@@ -1,0 +1,5 @@
+.divider {
+    height: 0.25rem;
+    border-radius: 9999px;
+    background: var(--slide-primary);
+}

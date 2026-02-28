@@ -19,6 +19,7 @@ import {
   Cell,
 } from "recharts";
 import { useExportMode } from "@/contexts/ExportContext";
+import styles from "./Media.module.css";
 
 type ChartType = "bar" | "line" | "pie" | "area";
 
@@ -55,8 +56,8 @@ export function Chart({
     return (
       <div
         data-growable=""
-        className="flex w-full items-center justify-center text-2xl text-gray-400"
-        style={{ minHeight: height, margin: "var(--slide-space-sm) 0" }}
+        className={styles.chartNoData}
+        style={{ minHeight: height }}
       >
         No data
       </div>
@@ -64,7 +65,7 @@ export function Chart({
   }
 
   return (
-    <div data-growable="" className="w-full" style={{ minHeight: height, margin: "var(--slide-space-sm) 0" }}>
+    <div data-growable="" className={styles.chartContainer} style={{ minHeight: height }}>
       <ResponsiveContainer width="100%" height="100%">
         {renderChart({ type, data, xKey, yKey, colors, animate })}
       </ResponsiveContainer>

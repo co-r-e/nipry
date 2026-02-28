@@ -373,7 +373,8 @@ Then use in any MDX file:
 
 - [Next.js 16](https://nextjs.org/) -- React framework with App Router and Turbopack
 - [TypeScript](https://www.typescriptlang.org/) -- Type safety
-- [Tailwind CSS 4](https://tailwindcss.com/) -- Styling
+- Native CSS Variables & CSS Modules -- Strict encapsulation for slide styling
+- [Tailwind CSS 4](https://tailwindcss.com/) -- Dashboard and app UI styling
 - [MDX](https://mdxjs.com/) -- Markdown + JSX for slide content
 - [Recharts](https://recharts.org/) -- Charts and data visualization
 - [Lucide](https://lucide.dev/) -- Icon library

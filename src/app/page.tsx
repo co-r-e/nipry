@@ -1,10 +1,18 @@
 import { listDecks } from "@/lib/deck-loader";
 import { DeckGrid } from "@/components/deck-list/DeckGrid";
+import { getTunnelAccess } from "@/lib/tunnel-access";
+import { redirect, notFound } from "next/navigation";
 import Image from "next/image";
 
 export const dynamic = "force-dynamic";
 
 export default async function HomePage() {
+  const { isLocal, sharedDeck } = await getTunnelAccess();
+  if (!isLocal) {
+    if (sharedDeck) redirect(`/${sharedDeck}`);
+    notFound();
+  }
+
   const decks = await listDecks();
 
   return (

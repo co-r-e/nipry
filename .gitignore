@@ -41,6 +41,12 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
+# gemini
+.gemini/
+
+# test results
+/test-results/
+
 # nipry decks (keep sample-deck only)
 /decks/*
 !/decks/sample-deck/

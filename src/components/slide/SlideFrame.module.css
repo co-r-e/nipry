@@ -1,0 +1,51 @@
+.frame {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+}
+
+.sectionDeco {
+    pointer-events: none;
+    position: absolute;
+    inset: 0;
+    opacity: 0.04;
+}
+
+.overlayContainer {
+    position: absolute;
+    inset: 0;
+    z-index: 10;
+    pointer-events: none;
+}
+
+.contentContainer {
+    display: flex;
+    height: 100%;
+    width: 100%;
+}
+
+.layoutCover {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.layoutSection {
+    flex-direction: column;
+    justify-content: center;
+}
+
+.layoutQuote {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.layoutImageFull {
+    flex-direction: column;
+}
+
+.layoutDefault {
+    flex-direction: column;
+}

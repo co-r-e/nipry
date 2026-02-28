@@ -35,21 +35,21 @@ export function useDeckNavigation({
 
   const handleNavigate = useCallback(
     (index: number) => {
-      goTo(index);
-      broadcastNavigation(index);
+      const clamped = goTo(index);
+      broadcastNavigation(clamped);
     },
     [goTo, broadcastNavigation],
   );
 
   const handleNext = useCallback(() => {
-    next();
-    broadcastNavigation(Math.min(currentSlide + 1, totalSlides - 1));
-  }, [next, broadcastNavigation, currentSlide, totalSlides]);
+    const newIndex = next();
+    broadcastNavigation(newIndex);
+  }, [next, broadcastNavigation]);
 
   const handlePrevious = useCallback(() => {
-    previous();
-    broadcastNavigation(Math.max(currentSlide - 1, 0));
-  }, [previous, broadcastNavigation, currentSlide]);
+    const newIndex = previous();
+    broadcastNavigation(newIndex);
+  }, [previous, broadcastNavigation]);
 
   useKeyboardNavigation({
     onNext: handleNext,

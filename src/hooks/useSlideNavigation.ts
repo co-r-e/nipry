@@ -34,21 +34,22 @@ export function useSlideNavigation({
   const currentSlideRef = useRef(currentSlide);
 
   const goTo = useCallback(
-    (index: number) => {
+    (index: number): number => {
       const clamped = clampIndex(index, totalSlides);
       currentSlideRef.current = clamped;
       setCurrentSlide(clamped);
       onSlideChange?.(clamped);
+      return clamped;
     },
     [totalSlides, onSlideChange],
   );
 
-  const next = useCallback(() => {
-    goTo(currentSlideRef.current + 1);
+  const next = useCallback((): number => {
+    return goTo(currentSlideRef.current + 1);
   }, [goTo]);
 
-  const previous = useCallback(() => {
-    goTo(currentSlideRef.current - 1);
+  const previous = useCallback((): number => {
+    return goTo(currentSlideRef.current - 1);
   }, [goTo]);
 
   const first = useCallback(() => goTo(0), [goTo]);

@@ -1,0 +1,6 @@
+.paragraph {
+    display: block;
+    font-size: 2rem;
+    line-height: var(--slide-body-leading);
+    margin-bottom: var(--slide-space-sm);
+}

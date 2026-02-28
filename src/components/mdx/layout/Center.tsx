@@ -1,16 +1,17 @@
 import type { ReactNode } from "react";
+import styles from "./Center.module.css";
 
 interface CenterProps {
   children: ReactNode;
   gap?: string;
 }
 
-export function Center({ children, gap = "var(--slide-space-lg)" }: CenterProps) {
+export function Center({ children, gap }: CenterProps) {
   return (
     <div
       data-growable=""
-      className="flex flex-1 flex-col items-center justify-center text-center"
-      style={{ gap }}
+      className={styles.center}
+      style={gap ? { gap } : undefined}
     >
       {children}
     </div>

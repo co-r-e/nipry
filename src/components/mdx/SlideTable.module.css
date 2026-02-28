@@ -1,0 +1,30 @@
+.container {
+    overflow-x: auto;
+    border-radius: var(--slide-radius, 0.75rem);
+    border: 1px solid var(--slide-border);
+    margin: var(--slide-space-sm) 0;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 1.75rem;
+}
+
+.th {
+    padding: 1.25rem 2rem;
+    text-align: left;
+    font-size: 1.5rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    background: var(--slide-surface);
+    color: var(--slide-text-muted);
+    border-bottom: 2px solid var(--slide-border);
+}
+
+.td {
+    padding: 1.25rem 2rem;
+    border-bottom: 1px solid var(--slide-border-light);
+    color: var(--slide-text);
+}

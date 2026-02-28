@@ -1,4 +1,5 @@
 import type { ComponentPropsWithoutRef } from "react";
+import styles from "./Paragraph.module.css";
 
 // Renders as <span display:block> to avoid HTML nesting violations.
 // MDX wraps text inside JSX elements with the `p` component, so:
@@ -7,11 +8,5 @@ import type { ComponentPropsWithoutRef } from "react";
 // <span> is phrasing content (valid inside <p>) and with display:block
 // behaves visually identical to a block element.
 export function SlideParagraph(props: ComponentPropsWithoutRef<"span">) {
-  return (
-    <span
-      className="block text-[2rem]"
-      style={{ lineHeight: "var(--slide-body-leading)", marginBottom: "var(--slide-space-sm)" }}
-      {...props}
-    />
-  );
+  return <span className={styles.paragraph} {...props} />;
 }

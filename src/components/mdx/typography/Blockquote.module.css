@@ -1,0 +1,10 @@
+.blockquote {
+    border-radius: 0.5rem;
+    padding: 1.5rem 2rem;
+    font-size: 2rem;
+    font-style: italic;
+    background: var(--slide-surface);
+    color: var(--slide-text-muted);
+    line-height: var(--slide-body-leading);
+    margin: var(--slide-space-sm) 0;
+}

@@ -38,6 +38,7 @@ export interface ThemeColors {
   primary: string;
   secondary?: string;
   accent?: string;
+  headingGradient?: string;
   background?: string;
   text?: string;
   textMuted?: string;

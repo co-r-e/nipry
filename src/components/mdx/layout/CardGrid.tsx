@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import styles from "./CardGrid.module.css";
 
 interface CardGridProps {
   children: ReactNode;
@@ -6,18 +7,15 @@ interface CardGridProps {
   gap?: string;
 }
 
-export function CardGrid({ children, columns = 3, gap = "var(--slide-space-lg)" }: CardGridProps) {
+export function CardGrid({ children, columns = 3, gap }: CardGridProps) {
   return (
     <div
       data-growable=""
-      className="flex-1"
+      className={styles.grid}
       style={{
-        display: "grid",
-        gridTemplateColumns: `repeat(${columns}, 1fr)`,
-        gap,
-        alignContent: "center",
-        marginTop: "var(--slide-space-sm)",
-      }}
+        "--columns": columns,
+        ...(gap ? { gap } : {}),
+      } as React.CSSProperties}
     >
       {children}
     </div>

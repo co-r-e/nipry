@@ -4,6 +4,9 @@ import Link from "next/link";
 import { ArrowLeft, Monitor } from "lucide-react";
 import type { Deck } from "@/types/deck";
 import { SlideThumbnail } from "./SlideThumbnail";
+import { ShareButton } from "@/components/viewer/ShareButton";
+import { ExportButton } from "@/components/deck-list/ExportButton";
+import { useIsLocal } from "@/hooks/useIsLocal";
 
 interface SidebarProps {
   deck: Deck;
@@ -18,6 +21,8 @@ export function Sidebar({
   onSlideSelect,
   onPresenterMode,
 }: SidebarProps) {
+  const isLocal = useIsLocal();
+
   return (
     <aside className="flex h-full w-64 flex-col border-r border-gray-200 bg-white">
       <div className="flex flex-col gap-3 border-b border-gray-200 p-4">
@@ -25,12 +30,14 @@ export function Sidebar({
           {deck.config.title}
         </h1>
         <div className="flex gap-2">
-          <Link
-            href="/"
-            className="flex items-center justify-center rounded-lg border border-gray-200 px-2 py-2 transition-colors hover:bg-gray-100"
-          >
-            <ArrowLeft size={14} className="text-gray-600" />
-          </Link>
+          {isLocal && (
+            <Link
+              href="/"
+              className="flex items-center justify-center rounded-lg border border-gray-200 px-2 py-2 transition-colors hover:bg-gray-100"
+            >
+              <ArrowLeft size={14} className="text-gray-600" />
+            </Link>
+          )}
           <button
             onClick={onPresenterMode}
             className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-[#02001A] px-3 py-2 text-xs font-medium text-white transition-opacity hover:opacity-80"
@@ -38,6 +45,14 @@ export function Sidebar({
             <Monitor size={14} />
             Presenter Mode
           </button>
+        </div>
+        <div className="flex gap-2">
+          {isLocal && (
+            <div className="flex-1 min-w-0">
+              <ShareButton deckName={deck.name} />
+            </div>
+          )}
+          <ExportButton deckName={deck.name} />
         </div>
       </div>
 

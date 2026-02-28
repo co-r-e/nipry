@@ -1,0 +1,45 @@
+.stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: var(--slide-space-lg);
+    background: var(--slide-surface);
+    border-radius: var(--slide-radius, 1rem);
+}
+
+.value {
+    color: var(--slide-primary);
+    margin-bottom: 0.25rem;
+    font-weight: bold;
+    line-height: 1;
+}
+
+.label {
+    color: var(--slide-text-muted);
+}
+
+.smValue {
+    font-size: 2.5rem;
+}
+
+.smLabel {
+    font-size: 1.8rem;
+}
+
+.mdValue {
+    font-size: 3.2rem;
+}
+
+.mdLabel {
+    font-size: 1.8rem;
+}
+
+.lgValue {
+    font-size: 5rem;
+}
+
+.lgLabel {
+    font-size: 2rem;
+}

@@ -1,0 +1,4 @@
+.container,
+.container * {
+    cursor: none !important;
+}

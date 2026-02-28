@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import fs from "node:fs/promises";
 import path from "node:path";
+import { isLocalRequest, getSharedDeckName } from "@/lib/tunnel-access";
 
 const DECKS_DIR = path.join(process.cwd(), "decks");
 
@@ -26,6 +27,12 @@ export async function GET(
   { params }: { params: Promise<{ path: string[] }> },
 ) {
   const segments = (await params).path;
+
+  // Block remote access to non-shared decks
+  const deckFromPath = segments[0];
+  if (!isLocalRequest(_request) && getSharedDeckName() !== deckFromPath) {
+    return NextResponse.json({ error: "Not found" }, { status: 404 });
+  }
 
   // Prevent directory traversal
   if (segments.some((s) => s === ".." || s.includes("\0"))) {

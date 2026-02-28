@@ -2,6 +2,7 @@
 
 import * as icons from "lucide-react";
 import type { LucideProps } from "lucide-react";
+import styles from "./Media.module.css";
 
 interface IconProps extends Omit<LucideProps, "ref"> {
   name: string;
@@ -16,7 +17,7 @@ export function Icon({ name, ...props }: IconProps) {
   const LucideIcon = icons[pascalName] as React.ComponentType<LucideProps> | undefined;
 
   if (!LucideIcon) {
-    return <span className="text-red-500">[Icon: {name}]</span>;
+    return <span className={styles.iconError}>[Icon: {name}]</span>;
   }
 
   return <LucideIcon {...props} />;

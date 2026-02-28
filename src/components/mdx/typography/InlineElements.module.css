@@ -1,0 +1,13 @@
+.hr {
+    border: none;
+    border-top: 2px solid var(--slide-border);
+    margin: var(--slide-space-sm) 0;
+}
+
+.a {
+    font-size: 2rem;
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 4px;
+    color: var(--slide-primary);
+}

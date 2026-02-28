@@ -1,5 +1,7 @@
 "use client";
 
+import styles from "./Media.module.css";
+
 interface VideoProps {
   src: string;
   title?: string;
@@ -12,11 +14,11 @@ export function Video({ src, title, autoPlay = false }: VideoProps) {
 
   if (isYouTube || isVimeo) {
     return (
-      <div className="my-4 aspect-video w-full overflow-hidden rounded-xl">
+      <div className={styles.videoWrapper}>
         <iframe
           src={src}
           title={title ?? "Video"}
-          className="h-full w-full"
+          className={styles.videoIframe}
           allowFullScreen
           sandbox="allow-same-origin allow-scripts allow-presentation allow-popups"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -29,7 +31,7 @@ export function Video({ src, title, autoPlay = false }: VideoProps) {
     <video
       src={src}
       title={title}
-      className="my-4 max-h-[60%] w-full rounded-xl"
+      className={styles.videoNative}
       controls
       autoPlay={autoPlay}
       muted={autoPlay}

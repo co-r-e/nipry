@@ -1,5 +1,6 @@
 import { loadDeck } from "@/lib/deck-loader";
 import { PresenterView } from "@/components/presenter/PresenterView";
+import { getTunnelAccess } from "@/lib/tunnel-access";
 import { notFound } from "next/navigation";
 
 export const dynamic = "force-dynamic";
@@ -10,6 +11,9 @@ interface PresenterPageProps {
 
 export default async function PresenterPage({ params }: PresenterPageProps) {
   const { deck: deckName } = await params;
+
+  const { isLocal, sharedDeck } = await getTunnelAccess();
+  if (!isLocal && sharedDeck !== deckName) notFound();
 
   let deck;
   try {

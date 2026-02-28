@@ -1,13 +1,14 @@
 import type { ReactNode } from "react";
+import styles from "./Columns.module.css";
 
 interface ColumnsProps {
   children: ReactNode;
   gap?: string;
 }
 
-export function Columns({ children, gap = "var(--slide-space-lg)" }: ColumnsProps) {
+export function Columns({ children, gap }: ColumnsProps) {
   return (
-    <div data-growable="" className="flex h-full w-full" style={{ gap }}>
+    <div data-growable="" className={styles.columns} style={gap ? { gap } : undefined}>
       {children}
     </div>
   );
@@ -20,7 +21,11 @@ interface ColumnProps {
 
 export function Column({ children, width }: ColumnProps) {
   return (
-    <div data-column="" className="flex-1" style={width ? { flex: `0 0 ${width}` } : undefined}>
+    <div
+      data-column=""
+      className={styles.column}
+      style={width ? { flex: `0 0 ${width}` } : undefined}
+    >
       {children}
     </div>
   );

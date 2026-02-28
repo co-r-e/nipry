@@ -1,6 +1,7 @@
 import { ImageResponse } from "next/og";
 import { loadDeck } from "@/lib/deck-loader";
 import { resolveSlideBackground } from "@/lib/slide-utils";
+import { isLocalHost, getSharedDeckName } from "@/lib/tunnel-access";
 
 // ---------------------------------------------------------------------------
 // Types
@@ -36,6 +37,13 @@ export async function GET(
   { params }: { params: Promise<{ deck: string; slide: string }> },
 ) {
   const { deck: deckName, slide: slideStr } = await params;
+
+  // Block remote access to non-shared decks
+  const host = _request.headers.get("host") ?? "";
+  if (!isLocalHost(host) && getSharedDeckName() !== deckName) {
+    return new Response("Not found", { status: 404 });
+  }
+
   const slideIndex = parseInt(slideStr, 10);
 
   if (isNaN(slideIndex) || slideIndex < 0) {
@@ -75,10 +83,15 @@ export async function GET(
   }
 
   try {
-    return new ImageResponse(renderSlide(blocks, theme), {
+    const response = new ImageResponse(renderSlide(blocks, theme), {
       width: 960,
       height: 540,
     });
+    response.headers.set(
+      "Cache-Control",
+      "public, max-age=60, stale-while-revalidate=300",
+    );
+    return response;
   } catch (e) {
     return new Response(
       `Render error: ${e instanceof Error ? e.message : String(e)}`,

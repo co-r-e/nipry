@@ -1,0 +1,47 @@
+.overlay {
+    position: absolute;
+    z-index: 10;
+}
+
+.topLeft {
+    top: 24px;
+    left: 40px;
+}
+
+.topCenter {
+    top: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.topRight {
+    top: 24px;
+    right: 40px;
+}
+
+.bottomLeft {
+    bottom: 24px;
+    left: 40px;
+}
+
+.bottomCenter {
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.bottomRight {
+    bottom: 24px;
+    right: 40px;
+}
+
+.logoImage {
+    height: 3rem;
+    width: auto;
+}
+
+.text {
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+    color: #9ca3af;
+}

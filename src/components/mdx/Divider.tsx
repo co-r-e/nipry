@@ -1,3 +1,5 @@
+import styles from "./Divider.module.css";
+
 interface DividerProps {
   width?: number;
   color?: string;
@@ -6,10 +8,10 @@ interface DividerProps {
 export function Divider({ width = 120, color }: DividerProps) {
   return (
     <div
-      className="h-1 rounded-full"
+      className={styles.divider}
       style={{
         width,
-        background: color ?? "var(--slide-primary)",
+        ...(color ? { background: color } : {}),
       }}
     />
   );

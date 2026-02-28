@@ -2,6 +2,7 @@
 
 import type { DeckConfig, LogoPosition, SlideType } from "@/types/deck";
 import { cn } from "@/lib/utils";
+import styles from "./SlideOverlay.module.css";
 
 interface SlideOverlayProps {
   config: DeckConfig;
@@ -11,12 +12,12 @@ interface SlideOverlayProps {
 }
 
 const positionClasses: Record<LogoPosition, string> = {
-  "top-left": "top-[24px] left-[40px]",
-  "top-center": "top-[24px] left-1/2 -translate-x-1/2",
-  "top-right": "top-[24px] right-[40px]",
-  "bottom-left": "bottom-[24px] left-[40px]",
-  "bottom-center": "bottom-[24px] left-1/2 -translate-x-1/2",
-  "bottom-right": "bottom-[24px] right-[40px]",
+  "top-left": styles.topLeft,
+  "top-center": styles.topCenter,
+  "top-right": styles.topRight,
+  "bottom-left": styles.bottomLeft,
+  "bottom-center": styles.bottomCenter,
+  "bottom-right": styles.bottomRight,
 };
 
 function resolveAssetPath(src: string, deckName: string): string {
@@ -42,14 +43,12 @@ export function SlideOverlay({
   return (
     <>
       {logo && (
-        <div
-          className={cn("absolute z-10", positionClasses[logo.position])}
-        >
+        <div className={cn(styles.overlay, positionClasses[logo.position])}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={resolveAssetPath(logo.src, deckName)}
             alt="Logo"
-            className="h-12 w-auto"
+            className={styles.logoImage}
           />
         </div>
       )}
@@ -57,8 +56,9 @@ export function SlideOverlay({
       {copyright && (
         <div
           className={cn(
-            "absolute z-10 text-xl text-gray-400",
-            positionClasses[copyright.position],
+            styles.overlay,
+            styles.text,
+            positionClasses[copyright.position]
           )}
         >
           {copyright.text}
@@ -68,8 +68,9 @@ export function SlideOverlay({
       {showPageNumber && (
         <div
           className={cn(
-            "absolute z-10 text-xl text-gray-400",
-            positionClasses[pageNumber.position],
+            styles.overlay,
+            styles.text,
+            positionClasses[pageNumber.position]
           )}
         >
           {currentPage + (pageNumber.startFrom ?? 1)}
