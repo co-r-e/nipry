@@ -14,10 +14,15 @@ A slide presentation tool built with Next.js and MDX. Author your slides from th
 - **16:9 widescreen** -- Slides render at a virtual 1920x1080 resolution and scale to fit any screen
 - **Multi-deck** -- Manage multiple slide decks in a single project under `decks/`
 - **Presenter mode** -- Open a separate fullscreen window for projector output, synced in real-time via BroadcastChannel
-- **Keyboard navigation** -- Arrow keys, Space, Enter, Home, End
+- **Keyboard navigation** -- Arrow keys, Space, Enter, Home, End; press `?` for shortcut help
+- **Slide URL sync** -- URL updates with `?slide=N` as you navigate; supports browser back/forward and direct links
+- **Speaker notes** -- Resizable notes panel with basic Markdown rendering (bold, italic, code, headings, lists); touch-friendly resize handle
 - **Configurable overlays** -- Logo, copyright text, and page numbers with flexible positioning
 - **Built-in components** -- Charts, icons, code blocks, tables, multi-column layouts, math equations, shapes, video embeds
 - **PDF export** -- Export decks to PDF via Playwright
+- **Tunnel sharing** -- Share your deck over the internet with a single click via Cloudflare Tunnel
+- **Security headers** -- X-Content-Type-Options, X-Frame-Options, Referrer-Policy applied to all routes
+- **Accessible** -- WCAG AA modal focus traps, aria-labels, focus-visible indicators
 - **CLI-first workflow** -- The web UI is view-only; slides are authored and edited from the terminal
 - **Hot reload** -- File changes are reflected instantly via Next.js HMR
 
@@ -310,6 +315,7 @@ Assets are served via the API route at `/api/decks/{deck-name}/assets/{filename}
 |-----|-------------|
 | `/` | Deck listing page |
 | `/{deck-name}` | Slide viewer for a specific deck |
+| `/{deck-name}?slide=N` | Jump directly to slide N (1-based) |
 | `/{deck-name}/presenter` | Presenter mode (fullscreen projection) |
 
 ## Keyboard Shortcuts
@@ -324,6 +330,7 @@ These shortcuts work in both the slide viewer and presenter mode:
 | `End` | Last slide |
 | `f` | Toggle fullscreen (presenter mode) |
 | `Escape` | Exit fullscreen (presenter mode) |
+| `?` | Show keyboard shortcuts help |
 
 ## Presenter Mode
 
@@ -331,8 +338,7 @@ Click the "Presenter Mode" button in the sidebar to open a separate fullscreen w
 
 - The presenter window and main viewer stay synchronized via BroadcastChannel
 - Navigate from either window -- both update in real-time
-- Press `f` to toggle fullscreen
-- Press `Escape` to exit fullscreen
+- Press `f` to toggle fullscreen; press `Escape` to exit
 
 ## PDF Export
 
