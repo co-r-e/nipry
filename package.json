@@ -16,7 +16,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "notices:update": "node scripts/third-party-notices.mjs --update",
+    "notices:check": "node scripts/third-party-notices.mjs --check"
   },
   "dependencies": {
     "@google/genai": "^1.43.0",

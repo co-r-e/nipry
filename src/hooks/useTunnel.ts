@@ -74,8 +74,7 @@ export function useTunnel(deckName?: string): UseTunnelReturn {
 
   // Poll while connecting or active (sequential to avoid overlap)
   useEffect(() => {
-    const { phase } = state;
-    if (phase !== "connecting" && phase !== "active") return;
+    if (state.phase !== "connecting" && state.phase !== "active") return;
 
     let cancelled = false;
 

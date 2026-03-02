@@ -529,6 +529,13 @@ Then use in any MDX file:
 | `npm run start` | Start production server |
 | `npm run lint` | Run ESLint |
 
+## Community
+
+- [Contributing Guide](CONTRIBUTING.md)
+- [Code of Conduct](CODE_OF_CONDUCT.md)
+- [Security Policy](SECURITY.md)
+
 ## License
 
-[MIT](LICENSE)
+- Project license: [MIT](LICENSE)
+- Third-party notices: [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)
