@@ -1,7 +1,7 @@
-<svg width="119" height="133" viewBox="0 0 119 133" fill="none" xmlns="http://www.w3.org/2000/svg">
-<rect y="36.7461" width="73.4935" height="110.705" rx="10" transform="rotate(-30 0 36.7461)" fill="#E17120"/>
-<rect x="9.67969" y="22.3535" width="73.4935" height="110.705" rx="10" transform="rotate(-15 9.67969 22.3535)" fill="#E17120"/>
-<rect x="23" y="11" width="73" height="111" rx="10" fill="#E17120"/>
-<rect x="38.3281" y="3.33398" width="73.4935" height="110.705" rx="10" transform="rotate(15 38.3281 3.33398)" fill="#E17120"/>
-<rect x="55.3516" y="0.00195312" width="73.4935" height="110.705" rx="10" transform="rotate(30 55.3516 0.00195312)" fill="#E17120"/>
+<svg width="128" height="128" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect x="44" y="28" width="40" height="72" rx="6" transform="rotate(-30 64 64)" fill="#E17120"/>
+<rect x="44" y="28" width="40" height="72" rx="6" transform="rotate(-15 64 64)" fill="#E17120"/>
+<rect x="44" y="28" width="40" height="72" rx="6" fill="#E17120"/>
+<rect x="44" y="28" width="40" height="72" rx="6" transform="rotate(15 64 64)" fill="#E17120"/>
+<rect x="44" y="28" width="40" height="72" rx="6" transform="rotate(30 64 64)" fill="#E17120"/>
 </svg>

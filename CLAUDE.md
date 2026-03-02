@@ -1,4 +1,4 @@
-# nipry — Project CLAUDE.md
+# DexCode — Project CLAUDE.md
 
 ## MDX Slide Authoring Rules
 
