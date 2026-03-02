@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useMemo } from "react";
 import { Globe } from "lucide-react";
 import type { DeckSummary, Deck } from "@/types/deck";
 import type { TunnelState } from "@/lib/tunnel-manager";
@@ -13,9 +13,17 @@ interface DeckGridProps {
   decks: DeckSummary[];
 }
 
+type SortOption =
+  | "title-asc"
+  | "title-desc"
+  | "slides-asc"
+  | "slides-desc"
+  | "name-asc";
+
 export function DeckGrid({ decks }: DeckGridProps) {
   const isLocal = useIsLocal();
   const [sharingDeck, setSharingDeck] = useState<string | null>(null);
+  const [sortOption, setSortOption] = useState<SortOption>("title-asc");
 
   useEffect(() => {
     if (!isLocal) return;
@@ -29,11 +37,56 @@ export function DeckGrid({ decks }: DeckGridProps) {
       .catch((err) => console.warn("[dexcode] Failed to fetch tunnel state:", err));
   }, [isLocal]);
 
+  const sortedDecks = useMemo(() => {
+    const collator = new Intl.Collator(undefined, { numeric: true, sensitivity: "base" });
+    const next = [...decks];
+
+    switch (sortOption) {
+      case "title-asc":
+        next.sort((a, b) => collator.compare(a.title, b.title));
+        break;
+      case "title-desc":
+        next.sort((a, b) => collator.compare(b.title, a.title));
+        break;
+      case "slides-asc":
+        next.sort((a, b) => a.slideCount - b.slideCount || collator.compare(a.title, b.title));
+        break;
+      case "slides-desc":
+        next.sort((a, b) => b.slideCount - a.slideCount || collator.compare(a.title, b.title));
+        break;
+      case "name-asc":
+        next.sort((a, b) => collator.compare(a.name, b.name));
+        break;
+    }
+
+    return next;
+  }, [decks, sortOption]);
+
   return (
-    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-      {decks.map((deck) => (
-        <DeckCard key={deck.name} deck={deck} isSharing={deck.name === sharingDeck} />
-      ))}
+    <div className="space-y-4">
+      <div className="flex items-center justify-end">
+        <label className="flex items-center gap-2 text-sm text-gray-600">
+          Sort
+          <select
+            value={sortOption}
+            onChange={(e) => setSortOption(e.target.value as SortOption)}
+            className="rounded-md border border-gray-300 bg-white px-2.5 py-1.5 text-sm text-gray-700"
+            aria-label="Sort decks"
+          >
+            <option value="title-asc">Title (A-Z)</option>
+            <option value="title-desc">Title (Z-A)</option>
+            <option value="slides-asc">Slides (Low-High)</option>
+            <option value="slides-desc">Slides (High-Low)</option>
+            <option value="name-asc">Folder Name (A-Z)</option>
+          </select>
+        </label>
+      </div>
+
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {sortedDecks.map((deck) => (
+          <DeckCard key={deck.name} deck={deck} isSharing={deck.name === sharingDeck} />
+        ))}
+      </div>
     </div>
   );
 }
