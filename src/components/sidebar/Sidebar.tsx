@@ -6,6 +6,7 @@ import type { Deck } from "@/types/deck";
 import { SlideThumbnail } from "./SlideThumbnail";
 import { ShareButton } from "@/components/viewer/ShareButton";
 import { ExportButton } from "@/components/deck-list/ExportButton";
+import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { useIsLocal } from "@/hooks/useIsLocal";
 
 interface SidebarProps {
@@ -24,9 +25,9 @@ export function Sidebar({
   const isLocal = useIsLocal();
 
   return (
-    <aside className="flex h-full w-64 flex-col border-r border-gray-200 bg-white">
-      <div className="flex flex-col gap-3 border-b border-gray-200 p-4">
-        <h1 className="text-sm font-semibold text-gray-900 truncate">
+    <aside className="flex h-full w-64 flex-col border-r border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
+      <div className="flex flex-col gap-3 border-b border-gray-200 dark:border-gray-700 p-4">
+        <h1 className="text-sm font-semibold text-gray-900 dark:text-gray-100 truncate">
           {deck.config.title}
         </h1>
         <div className="flex gap-2">
@@ -34,14 +35,14 @@ export function Sidebar({
             <Link
               href="/"
               aria-label="Back to deck list"
-              className="flex items-center justify-center rounded-lg border border-gray-200 px-2 py-2 transition-colors hover:bg-gray-100"
+              className="flex items-center justify-center rounded-lg border border-gray-200 dark:border-gray-700 px-2 py-2 transition-colors hover:bg-gray-100 dark:hover:bg-gray-800"
             >
-              <ArrowLeft size={14} className="text-gray-600" />
+              <ArrowLeft size={14} className="text-gray-600 dark:text-gray-400" />
             </Link>
           )}
           <button
             onClick={onPresenterMode}
-            className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-[#02001A] px-3 py-2 text-xs font-medium text-white transition-opacity hover:opacity-80"
+            className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-[#02001A] dark:bg-gray-100 px-3 py-2 text-xs font-medium text-white dark:text-gray-900 transition-opacity hover:opacity-80"
           >
             <Monitor size={14} />
             Presenter Mode
@@ -72,8 +73,11 @@ export function Sidebar({
         </div>
       </div>
 
-      <div className="border-t border-gray-200 p-3 text-center text-xs text-gray-400">
-        {currentSlide + 1} / {deck.slides.length}
+      <div className="flex items-center justify-between border-t border-gray-200 dark:border-gray-700 p-3">
+        <ThemeToggle />
+        <span className="text-xs text-gray-400 dark:text-gray-500">
+          {currentSlide + 1} / {deck.slides.length}
+        </span>
       </div>
     </aside>
   );

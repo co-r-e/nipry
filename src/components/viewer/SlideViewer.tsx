@@ -125,26 +125,18 @@ function MobileViewer({ deck }: SlideViewerProps): React.JSX.Element {
 
   return (
     <div
+      className="bg-ice-gray dark:bg-ice-gray-dark"
       style={{
         minHeight: "100dvh",
-        backgroundColor: "#F0F2F5",
         overflowY: "auto",
         WebkitOverflowScrolling: "touch",
       }}
     >
       <header
+        className="sticky top-0 z-20 bg-ice-gray/92 dark:bg-ice-gray-dark/92 px-4 py-2.5 text-sm font-semibold text-gray-700 dark:text-gray-200 border-b border-black/6 dark:border-white/10"
         style={{
-          position: "sticky",
-          top: 0,
-          zIndex: 20,
-          backgroundColor: "rgba(240, 242, 245, 0.92)",
           backdropFilter: "saturate(180%) blur(12px)",
           WebkitBackdropFilter: "saturate(180%) blur(12px)",
-          padding: "10px 16px",
-          fontSize: "14px",
-          fontWeight: 600,
-          color: "#374151",
-          borderBottom: "1px solid rgba(0,0,0,0.06)",
         }}
       >
         {deck.config.title}
@@ -209,10 +201,10 @@ export function SlideViewer({ deck: initialDeck }: SlideViewerProps): React.JSX.
 
       <main
         ref={containerRef}
-        className="relative flex flex-1 items-center justify-center bg-[#F0F2F5] overflow-hidden"
+        className="relative flex flex-1 items-center justify-center bg-ice-gray dark:bg-ice-gray-dark overflow-hidden"
       >
         <div
-          className="shadow-xl"
+          className="shadow-xl dark:shadow-2xl dark:shadow-black/60"
           style={buildScaledSlideStyle(scale, bg)}
         >
           <SlideFrame
@@ -226,7 +218,7 @@ export function SlideViewer({ deck: initialDeck }: SlideViewerProps): React.JSX.
         {!isOpen && (
           <button
             onClick={toggle}
-            className="absolute right-3 top-3 rounded bg-white/80 p-1.5 text-gray-400 shadow-sm backdrop-blur transition-colors hover:bg-white hover:text-gray-600"
+            className="absolute right-3 top-3 rounded bg-white/80 dark:bg-gray-800/80 p-1.5 text-gray-400 dark:text-gray-500 shadow-sm backdrop-blur transition-colors hover:bg-white dark:hover:bg-gray-700 hover:text-gray-600 dark:hover:text-gray-300"
             aria-label="Open notes panel"
           >
             <PanelRight size={18} />

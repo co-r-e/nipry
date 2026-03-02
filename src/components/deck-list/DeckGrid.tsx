@@ -65,12 +65,12 @@ export function DeckGrid({ decks }: DeckGridProps) {
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-end">
-        <label className="flex items-center gap-2 text-sm text-gray-600">
+        <label className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
           Sort
           <select
             value={sortOption}
             onChange={(e) => setSortOption(e.target.value as SortOption)}
-            className="rounded-md border border-gray-300 bg-white px-2.5 py-1.5 text-sm text-gray-700"
+            className="rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 px-2.5 py-1.5 text-sm text-gray-700 dark:text-gray-200"
             aria-label="Sort decks"
           >
             <option value="title-asc">Title (A-Z)</option>
@@ -126,11 +126,11 @@ function DeckCard({ deck, isSharing }: { deck: DeckSummary; isSharing: boolean }
     : "#f3f4f6";
 
   return (
-    <div className="group relative rounded-xl bg-white border-2 border-transparent transition-colors hover:border-[#02001A]">
+    <div className="group relative rounded-xl bg-white dark:bg-gray-900 border-2 border-transparent transition-colors hover:border-[#02001A] dark:hover:border-gray-400">
       <Link href={`/${deck.name}`} className="block p-6">
         <div
           ref={containerRef}
-          className="mb-4 relative overflow-hidden rounded-lg bg-gray-100"
+          className="mb-4 relative overflow-hidden rounded-lg bg-gray-100 dark:bg-gray-800"
           style={{ aspectRatio: "16/9" }}
         >
           {coverSlide && deckData && scale != null ? (
@@ -152,20 +152,20 @@ function DeckCard({ deck, isSharing }: { deck: DeckSummary; isSharing: boolean }
             </div>
           ) : (
             <div className="absolute inset-0 flex items-center justify-center">
-              <div className="h-6 w-6 animate-spin rounded-full border-2 border-gray-300 border-t-gray-500" />
+              <div className="h-6 w-6 animate-spin rounded-full border-2 border-gray-300 dark:border-gray-600 border-t-gray-500 dark:border-t-gray-400" />
             </div>
           )}
         </div>
-        <h2 className="text-lg font-semibold text-gray-900 group-hover:text-[#02001A]">
+        <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 group-hover:text-[#02001A] dark:group-hover:text-white">
           {deck.title}
         </h2>
-        <p className="mt-1 text-sm text-gray-500">
+        <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
           {deck.slideCount} slides
         </p>
       </Link>
 
       {isSharing && (
-        <div className="absolute top-4 right-4 z-10 flex items-center gap-1.5 rounded-full bg-emerald-50 px-2.5 py-1 border border-emerald-200">
+        <div className="absolute top-4 right-4 z-10 flex items-center gap-1.5 rounded-full bg-emerald-50 dark:bg-emerald-900/50 px-2.5 py-1 border border-emerald-200 dark:border-emerald-700">
           <Globe size={12} className="text-emerald-600" />
           <span className="text-[11px] font-medium text-emerald-600">Sharing</span>
         </div>

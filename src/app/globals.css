@@ -1,8 +1,11 @@
 @import "tailwindcss";
 @import "katex/dist/katex.min.css";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme inline {
   --color-ice-gray: #F0F2F5;
+  --color-ice-gray-dark: #0f1117;
   --color-dexcode-dark: #02001A;
   --color-slide-bg: #FFFFFF;
   --font-sans: "Inter", "Noto Sans JP", sans-serif;
@@ -16,6 +19,11 @@ body {
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+:where(.dark) body {
+  background: var(--color-ice-gray-dark);
+  color: #e5e7eb;
 }
 
 /* Reset inline code styles inside pre blocks (terminal) */

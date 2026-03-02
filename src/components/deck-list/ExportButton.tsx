@@ -34,7 +34,7 @@ const FORMAT_LABELS: Record<ExportFormat, string> = {
 };
 
 const MENU_ITEM_CLASS =
-  "flex w-full items-center px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-100 transition-colors";
+  "flex w-full items-center px-4 py-2.5 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors";
 
 const OFFSCREEN_STYLE: React.CSSProperties = {
   position: "fixed",
@@ -227,7 +227,7 @@ export function ExportButton({ deckName }: ExportButtonProps): ReactNode {
 
   function renderButtonContent(): ReactNode {
     if (phase === "error") {
-      return <span className="text-red-300">Error</span>;
+      return <span className="text-red-300 dark:text-red-500">Error</span>;
     }
 
     const icon = isWorking
@@ -255,7 +255,7 @@ export function ExportButton({ deckName }: ExportButtonProps): ReactNode {
       <button
         onClick={toggleMenu}
         disabled={isWorking}
-        className="flex items-center gap-1.5 rounded-lg bg-[#02001A] px-3 py-1.5 text-sm text-white transition-colors hover:bg-[#1a1a3a] disabled:opacity-50 disabled:cursor-not-allowed"
+        className="flex items-center gap-1.5 rounded-lg bg-[#02001A] dark:bg-gray-100 px-3 py-1.5 text-sm text-white dark:text-gray-900 transition-colors hover:bg-[#1a1a3a] dark:hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed"
         title={`Export ${deckName}`}
       >
         {renderButtonContent()}

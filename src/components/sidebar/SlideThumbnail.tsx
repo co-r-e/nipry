@@ -72,9 +72,9 @@ export const SlideThumbnail = memo(function SlideThumbnail({
       aria-label={`Slide ${slide.index + 1}`}
       aria-current={active ? "true" : undefined}
       className={cn(
-        "w-full rounded-lg overflow-hidden transition-all text-left focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-1",
-        "hover:ring-2 hover:ring-gray-300",
-        active && "ring-2 ring-[#02001A]",
+        "w-full rounded-lg overflow-hidden transition-all text-left focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-1 dark:focus-visible:ring-offset-gray-900",
+        "hover:ring-2 hover:ring-gray-300 dark:hover:ring-gray-600",
+        active && "ring-2 ring-[#02001A] dark:ring-gray-100",
       )}
     >
       <div

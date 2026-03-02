@@ -15,11 +15,11 @@ function processInline(text: string): React.ReactNode[] {
       parts.push(text.slice(lastIndex, match.index));
     }
     if (match[2]) {
-      parts.push(<strong key={match.index} className="font-semibold text-gray-800">{match[2]}</strong>);
+      parts.push(<strong key={match.index} className="font-semibold text-gray-800 dark:text-gray-100">{match[2]}</strong>);
     } else if (match[3]) {
       parts.push(<em key={match.index}>{match[3]}</em>);
     } else if (match[4]) {
-      parts.push(<code key={match.index} className="rounded bg-gray-100 px-1 py-0.5 text-xs">{match[4]}</code>);
+      parts.push(<code key={match.index} className="rounded bg-gray-100 dark:bg-gray-800 px-1 py-0.5 text-xs">{match[4]}</code>);
     }
     lastIndex = match.index + match[0].length;
   }
@@ -33,11 +33,11 @@ function renderSimpleMarkdown(text: string): React.ReactNode[] {
   return text.split("\n").map((line, i) => {
     // Heading
     if (line.startsWith("# ")) {
-      return <h3 key={i} className="mt-3 mb-1 text-sm font-semibold text-gray-800">{processInline(line.slice(2))}</h3>;
+      return <h3 key={i} className="mt-3 mb-1 text-sm font-semibold text-gray-800 dark:text-gray-100">{processInline(line.slice(2))}</h3>;
     }
     // List item
     if (line.startsWith("- ")) {
-      return <div key={i} className="ml-3 before:content-['•'] before:mr-2 before:text-gray-400">{processInline(line.slice(2))}</div>;
+      return <div key={i} className="ml-3 before:content-['•'] before:mr-2 before:text-gray-400 dark:before:text-gray-500">{processInline(line.slice(2))}</div>;
     }
     // Empty line
     if (line.trim() === "") {
@@ -82,17 +82,17 @@ export function NotesPanel({
       {/* Resize handle */}
       <div
         {...resizeHandleProps}
-        className="absolute left-0 top-0 z-10 h-full w-3 -translate-x-1/2 cursor-col-resize transition-colors hover:bg-black/20"
+        className="absolute left-0 top-0 z-10 h-full w-3 -translate-x-1/2 cursor-col-resize transition-colors hover:bg-black/20 dark:hover:bg-white/20"
       />
 
       {/* Panel body */}
-      <div className="flex h-full w-full flex-col border-l border-gray-200 bg-white">
+      <div className="flex h-full w-full flex-col border-l border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-gray-200 px-4 py-3">
-          <span className="text-sm font-semibold text-gray-700">Notes</span>
+        <div className="flex items-center justify-between border-b border-gray-200 dark:border-gray-700 px-4 py-3">
+          <span className="text-sm font-semibold text-gray-700 dark:text-gray-200">Notes</span>
           <button
             onClick={onToggle}
-            className="rounded p-1 text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-600"
+            className="rounded p-1 text-gray-400 transition-colors hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-600 dark:hover:text-gray-300"
             aria-label="Close notes panel"
           >
             <PanelRightClose size={18} />
@@ -102,11 +102,11 @@ export function NotesPanel({
         {/* Content */}
         <div ref={contentRef} className="flex-1 overflow-y-auto p-4">
           {notes ? (
-            <div className="prose-notes text-sm leading-relaxed text-gray-600">
+            <div className="prose-notes text-sm leading-relaxed text-gray-600 dark:text-gray-300">
               {renderSimpleMarkdown(notes)}
             </div>
           ) : (
-            <p className="text-sm text-gray-400">No notes</p>
+            <p className="text-sm text-gray-400 dark:text-gray-500">No notes</p>
           )}
         </div>
       </div>

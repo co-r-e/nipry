@@ -102,7 +102,7 @@ export function Modal({ open, onClose, children, ariaLabel }: ModalProps) {
 
   return createPortal(
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/40"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 dark:bg-black/60"
       onMouseDown={onClose}
     >
       <div
@@ -111,7 +111,7 @@ export function Modal({ open, onClose, children, ariaLabel }: ModalProps) {
         aria-modal="true"
         aria-label={ariaLabel}
         tabIndex={-1}
-        className="rounded-xl border border-gray-200 bg-white p-5 shadow-2xl outline-none"
+        className="rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 p-5 shadow-2xl outline-none"
         onMouseDown={(e) => e.stopPropagation()}
       >
         {children}
