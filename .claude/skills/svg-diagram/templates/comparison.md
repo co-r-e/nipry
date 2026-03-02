@@ -1,89 +1,89 @@
-# 比較図 テンプレート
+# Comparison Diagram Template
 
-2〜3項目を並列カラムで比較する図。Before/After、製品比較、手法比較に最適。
+A diagram that compares 2-3 items in parallel columns. Ideal for Before/After, product comparisons, and methodology comparisons.
 
-## レイアウトルール
+## Layout Rules
 
-- **接続矢印**: なし（比較図には矢印を使わない）
-- **カラム配置**: 等幅で水平に並べる
-- **ヘッダー行**: 各カラム上部に強調ラベル
-- **項目行**: ヘッダーの下に項目を縦に列挙
-- **カラム間**: 区切り線（垂直の薄い線）
+- **Connecting arrows**: None (comparison diagrams do not use arrows)
+- **Column placement**: Equal width, arranged horizontally
+- **Header row**: Emphasis label at the top of each column
+- **Item rows**: Items listed vertically below the header
+- **Between columns**: Divider line (thin vertical line)
 
-## カラム構造
+## Column Structure
 
-### カラムヘッダー
+### Column Header
 ```xml
 <g transform="translate({colX}, 48)">
   <rect width="{colW}" height="64" rx="12"
         fill="{primary}" stroke="none"/>
   <text x="{colW/2}" y="32" text-anchor="middle" dominant-baseline="central"
         font-family="{fontHeading}" font-size="18" font-weight="700" fill="#FFFFFF">
-    カラム名
+    Column Name
   </text>
 </g>
 ```
 
-### 項目行
+### Item Row
 ```xml
 <g transform="translate({colX}, {rowY})">
   <rect width="{colW}" height="48" rx="8"
         fill="{surface}" stroke="{border}" stroke-width="1"/>
   <text x="{colW/2}" y="24" text-anchor="middle" dominant-baseline="central"
         font-family="{fontBody}" font-size="15" font-weight="400" fill="{text}">
-    項目テキスト
+    Item Text
   </text>
 </g>
 ```
 
-### 区切り線（カラム間）
+### Divider Line (between columns)
 ```xml
 <line x1="{divX}" y1="48" x2="{divX}" y2="492"
       stroke="{border}" stroke-width="1" stroke-dasharray="4,4"/>
 ```
 
-## 座標計算ガイド
+## Coordinate Calculation Guide
 
-### 2カラム比較（viewBox 960x540）
+### 2-Column Comparison (viewBox 960x540)
 
-カラム幅 = (960 - 48*2 - 32) / 2 = 416  （外部パディング48 + カラム間隔32）
+Column width = (960 - 48*2 - 32) / 2 = 416 (outer padding 48 + column gap 32)
 
-| 要素 | X | 幅 |
-|------|---|-----|
-| カラム1 | 48 | 416 |
-| 区切り線 | 480 | - |
-| カラム2 | 496 | 416 |
+| Element | X | Width |
+|---------|---|-------|
+| Column 1 | 48 | 416 |
+| Divider line | 480 | - |
+| Column 2 | 496 | 416 |
 
-### 3カラム比較（viewBox 960x540）
+### 3-Column Comparison (viewBox 960x540)
 
-カラム幅 = (960 - 48*2 - 32*2) / 3 = 256
+Column width = (960 - 48*2 - 32*2) / 3 = 256
 
-| 要素 | X | 幅 |
-|------|---|-----|
-| カラム1 | 48 | 256 |
-| 区切り線1 | 320 | - |
-| カラム2 | 336 | 256 |
-| 区切り線2 | 608 | - |
-| カラム3 | 624 | 256 |
+| Element | X | Width |
+|---------|---|-------|
+| Column 1 | 48 | 256 |
+| Divider line 1 | 320 | - |
+| Column 2 | 336 | 256 |
+| Divider line 2 | 608 | - |
+| Column 3 | 624 | 256 |
 
-行レイアウト:
-- ヘッダー: Y=48, 高さ64
-- 項目1: Y=128, 高さ48
-- 項目2: Y=192, 高さ48
-- 項目3: Y=256, 高さ48
-- ... 以降 64px 間隔
+Row layout:
+- Header: Y=48, height 64
+- Item 1: Y=128, height 48
+- Item 2: Y=192, height 48
+- Item 3: Y=256, height 48
+- ... subsequent items at 64px intervals
 
-## 完成SVG実例
+## Complete SVG Example
 
-「REST vs GraphQL」（2カラム、4項目）:
+"REST vs GraphQL" (2 columns, 4 items):
 
 ```xml
 <svg xmlns="http://www.w3.org/2000/svg" width="960" height="540" viewBox="0 0 960 540">
-  <!-- 区切り線 -->
+  <!-- Divider line -->
   <line x1="480" y1="48" x2="480" y2="460"
         stroke="{border}" stroke-width="1" stroke-dasharray="4,4"/>
 
-  <!-- カラム1: REST -->
+  <!-- Column 1: REST -->
   <g transform="translate(48, 48)">
     <rect width="416" height="64" rx="12" fill="{primary}" stroke="none"/>
     <text x="208" y="32" text-anchor="middle" dominant-baseline="central"
@@ -97,7 +97,7 @@
           fill="{surface}" stroke="{border}" stroke-width="1"/>
     <text x="208" y="24" text-anchor="middle" dominant-baseline="central"
           font-family="{fontBody}" font-size="15" fill="{text}">
-      リソースごとにエンドポイント
+      One endpoint per resource
     </text>
   </g>
 
@@ -106,7 +106,7 @@
           fill="{surface}" stroke="{border}" stroke-width="1"/>
     <text x="208" y="24" text-anchor="middle" dominant-baseline="central"
           font-family="{fontBody}" font-size="15" fill="{text}">
-      Over-fetching の可能性
+      Risk of over-fetching
     </text>
   </g>
 
@@ -115,7 +115,7 @@
           fill="{surface}" stroke="{border}" stroke-width="1"/>
     <text x="208" y="24" text-anchor="middle" dominant-baseline="central"
           font-family="{fontBody}" font-size="15" fill="{text}">
-      キャッシュが容易
+      Easy to cache
     </text>
   </g>
 
@@ -124,11 +124,11 @@
           fill="{surface}" stroke="{border}" stroke-width="1"/>
     <text x="208" y="24" text-anchor="middle" dominant-baseline="central"
           font-family="{fontBody}" font-size="15" fill="{text}">
-      シンプルな学習コスト
+      Simple learning curve
     </text>
   </g>
 
-  <!-- カラム2: GraphQL -->
+  <!-- Column 2: GraphQL -->
   <g transform="translate(496, 48)">
     <rect width="416" height="64" rx="12" fill="{primary}" stroke="none"/>
     <text x="208" y="32" text-anchor="middle" dominant-baseline="central"
@@ -142,7 +142,7 @@
           fill="{surface}" stroke="{border}" stroke-width="1"/>
     <text x="208" y="24" text-anchor="middle" dominant-baseline="central"
           font-family="{fontBody}" font-size="15" fill="{text}">
-      単一エンドポイント
+      Single endpoint
     </text>
   </g>
 
@@ -151,7 +151,7 @@
           fill="{surface}" stroke="{border}" stroke-width="1"/>
     <text x="208" y="24" text-anchor="middle" dominant-baseline="central"
           font-family="{fontBody}" font-size="15" fill="{text}">
-      必要なデータのみ取得
+      Fetch only needed data
     </text>
   </g>
 
@@ -160,7 +160,7 @@
           fill="{surface}" stroke="{border}" stroke-width="1"/>
     <text x="208" y="24" text-anchor="middle" dominant-baseline="central"
           font-family="{fontBody}" font-size="15" fill="{text}">
-      キャッシュ戦略が複雑
+      Complex caching strategy
     </text>
   </g>
 
@@ -169,15 +169,15 @@
           fill="{surface}" stroke="{border}" stroke-width="1"/>
     <text x="208" y="24" text-anchor="middle" dominant-baseline="central"
           font-family="{fontBody}" font-size="15" fill="{text}">
-      スキーマ定義が必要
+      Schema definition required
     </text>
   </g>
 </svg>
 ```
 
-## バリエーション
+## Variations
 
-- **3カラム**: カラム幅を256pxに縮小、フォントサイズを14pxに
-- **強調行**: 特定の行を `{primary}1A` 背景 + `{primary}` 枠にしてハイライト
-- **アイコン付き**: 各項目の左端に小さな幾何学図形（丸、三角、四角）をステータスアイコンとして配置
-- **ヘッダーにサブタイトル**: ヘッダー内に2行テキスト（タイトル + 小さな補足）
+- **3 columns**: Reduce column width to 256px, font size to 14px
+- **Highlighted row**: Highlight a specific row with `{primary}1A` background + `{primary}` border
+- **With icons**: Place small geometric shapes (circle, triangle, square) as status icons at the left of each item
+- **Header with subtitle**: 2-line text in header (title + small supplementary text)

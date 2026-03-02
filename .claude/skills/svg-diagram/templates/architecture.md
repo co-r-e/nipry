@@ -1,80 +1,80 @@
-# アーキテクチャ図 テンプレート
+# Architecture Diagram Template
 
-左から右へレイヤーで構成されるシステム構成図。技術スタック、マイクロサービス、インフラ構成に最適。
+A system architecture diagram composed of layers flowing from left to right. Ideal for tech stacks, microservices, and infrastructure configurations.
 
-## レイアウトルール
+## Layout Rules
 
-- **フロー方向**: 左 → 右
-- **矢印**: 右辺中央 → 左辺中央（水平接続）
-- **レイヤー配置**: 縦のグループとして左から右に並べる
-- **レイヤー間隔**: 最低 48px
-- **レイヤー内ノード間隔**: 垂直 32〜48px
+- **Flow direction**: Left -> Right
+- **Arrows**: Right edge center -> Left edge center (horizontal connections)
+- **Layer placement**: Arranged as vertical groups from left to right
+- **Layer spacing**: Minimum 48px
+- **Node spacing within layers**: Vertical 32-48px
 
-## レイヤー構造
+## Layer Structure
 
-### レイヤー背景
+### Layer Background
 ```xml
 <g>
-  <!-- レイヤー背景 -->
+  <!-- Layer background -->
   <rect x="{lx}" y="48" width="{lw}" height="444" rx="16"
         fill="{surfaceAlt}" stroke="{border}" stroke-width="1"
         stroke-dasharray="6,3" opacity="0.5"/>
-  <!-- レイヤーラベル -->
+  <!-- Layer label -->
   <text x="{lx + lw/2}" y="76" text-anchor="middle"
         font-family="{fontBody}" font-size="14" font-weight="600" fill="{textMuted}">
-    レイヤー名
+    Layer Name
   </text>
 </g>
 ```
 
-### レイヤー内ノード
+### Nodes Within a Layer
 ```xml
 <g transform="translate({nx}, {ny})">
   <rect width="160" height="56" rx="12"
         fill="{surface}" stroke="{border}" stroke-width="1.5"/>
   <text x="80" y="28" text-anchor="middle" dominant-baseline="central"
         font-family="{fontHeading}" font-size="16" font-weight="600" fill="{text}">
-    サービス名
+    Service Name
   </text>
 </g>
 ```
 
-## 座標計算ガイド
+## Coordinate Calculation Guide
 
-3レイヤー構成の場合（viewBox 960x540）:
+For a 3-layer configuration (viewBox 960x540):
 
-| レイヤー | X開始 | 幅 | 備考 |
-|---------|-------|-----|------|
-| Layer 1 (Client) | 48 | 240 | 左端 |
-| Layer 2 (Server) | 336 | 288 | 中央 |
-| Layer 3 (Data) | 672 | 240 | 右端 |
+| Layer | X Start | Width | Notes |
+|-------|---------|-------|-------|
+| Layer 1 (Client) | 48 | 240 | Left edge |
+| Layer 2 (Server) | 336 | 288 | Center |
+| Layer 3 (Data) | 672 | 240 | Right edge |
 
-各レイヤー内のノード配置:
-- ノード幅: 160px
-- ノードのX: レイヤーX + (レイヤー幅 - 160) / 2（中央揃え）
-- ノードのY: 100 から開始、88px 間隔（56px高さ + 32px間隔）
+Node placement within each layer:
+- Node width: 160px
+- Node X: Layer X + (Layer width - 160) / 2 (centered)
+- Node Y: Starting from 100, with 88px intervals (56px height + 32px spacing)
 
-## 矢印パターン
+## Arrow Patterns
 
-### レイヤー間の水平接続
+### Horizontal Connection Between Layers
 ```xml
-<!-- ノードAの右辺 → ノードBの左辺 -->
+<!-- Node A right edge -> Node B left edge -->
 <path d="M {ax + aw} {ay + ah/2} H {bx}" fill="none"
       stroke="{textMuted}" stroke-width="1.5" marker-end="url(#arrow)"/>
 ```
 
-### 1対多の接続（1ノードから複数ノードへ）
+### One-to-Many Connection (one node to multiple nodes)
 ```xml
-<!-- ノードAの右辺中央 → 中間地点で分岐 → ノードB1, B2の左辺 -->
+<!-- Node A right edge center -> branch at midpoint -> Node B1, B2 left edge -->
 <path d="M {ax + aw} {ay + ah/2} H {midX} V {b1y + bh/2} H {bx}" fill="none"
       stroke="{textMuted}" stroke-width="1.5" marker-end="url(#arrow)"/>
 <path d="M {midX} {ay + ah/2} V {b2y + bh/2} H {bx}" fill="none"
       stroke="{textMuted}" stroke-width="1.5" marker-end="url(#arrow)"/>
 ```
 
-## 完成SVG実例
+## Complete SVG Example
 
-「Webアプリケーション 3層アーキテクチャ」:
+"Web Application 3-Tier Architecture":
 
 ```xml
 <svg xmlns="http://www.w3.org/2000/svg" width="960" height="540" viewBox="0 0 960 540">
@@ -175,38 +175,38 @@
     </text>
   </g>
 
-  <!-- 矢印: Browser → API Gateway -->
+  <!-- Arrow: Browser -> API Gateway -->
   <path d="M 248 148 H 400" fill="none"
         stroke="{textMuted}" stroke-width="1.5" marker-end="url(#arrow)"/>
 
-  <!-- 矢印: Mobile → API Gateway -->
+  <!-- Arrow: Mobile -> API Gateway -->
   <path d="M 248 236 H 320 V 148 H 400" fill="none"
         stroke="{textMuted}" stroke-width="1.5" marker-end="url(#arrow)"/>
 
-  <!-- 矢印: API Gateway → Auth Service -->
+  <!-- Arrow: API Gateway -> Auth Service -->
   <path d="M 480 176 V 208" fill="none"
         stroke="{textMuted}" stroke-width="1.5" marker-end="url(#arrow)"/>
 
-  <!-- 矢印: API Gateway → App Service -->
+  <!-- Arrow: API Gateway -> App Service -->
   <path d="M 480 176 V 296" fill="none"
         stroke="{textMuted}" stroke-width="1.5" marker-end="url(#arrow)"/>
 
-  <!-- 矢印: Auth Service → PostgreSQL -->
+  <!-- Arrow: Auth Service -> PostgreSQL -->
   <path d="M 560 236 H 640 V 192 H 712" fill="none"
         stroke="{textMuted}" stroke-width="1.5" marker-end="url(#arrow)"/>
 
-  <!-- 矢印: App Service → PostgreSQL -->
+  <!-- Arrow: App Service -> PostgreSQL -->
   <path d="M 560 324 H 660 V 192 H 712" fill="none"
         stroke="{textMuted}" stroke-width="1.5" marker-end="url(#arrow)"/>
 
-  <!-- 矢印: App Service → Redis -->
+  <!-- Arrow: App Service -> Redis -->
   <path d="M 560 324 H 660 V 308 H 712" fill="none"
         stroke="{textMuted}" stroke-width="1.5" marker-end="url(#arrow)"/>
 </svg>
 ```
 
-## バリエーション
+## Variations
 
-- **4レイヤー以上**: viewBox を `0 0 1200 540` に横拡張
-- **双方向矢印**: 2本の平行矢印を 8px オフセットで描画（上向き/下向きを分ける）
-- **外部サービス**: レイヤー外の独立ノードとして点線枠で配置
+- **4+ layers**: Extend the viewBox horizontally to `0 0 1200 540`
+- **Bidirectional arrows**: Draw 2 parallel arrows offset by 8px (separating up/down directions)
+- **External services**: Place as independent nodes outside layers with dashed borders

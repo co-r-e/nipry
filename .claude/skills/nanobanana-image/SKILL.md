@@ -1,9 +1,9 @@
 ---
 name: nanobanana-image
 description: |
-  AI画像生成スキル。Gemini API (gemini-3-pro-image-preview) を使ってスライド用の高品質画像を生成し、
-  デッキのassetsディレクトリに保存してMDXに挿入する。
-  トリガー: 「画像を生成」「画像を作って」「イメージを生成」「generate image」「create image」
+  AI image generation skill. Uses Gemini API (gemini-3.1-flash-image-preview) to generate
+  high-quality images for slides, saves them to the deck's assets directory, and inserts them into MDX.
+  Triggers: 「画像を生成」「画像を作って」「イメージを生成」「generate image」「create image」
 allowed-tools:
   - Bash
   - Read
@@ -13,37 +13,37 @@ allowed-tools:
   - Grep
 ---
 
-# nanobanana-image スキル
+# nanobanana-image Skill
 
-Gemini API を使ってスライド用の画像を生成し、MDXファイルに挿入するスキル。
+A skill that generates images for slides using Gemini API and inserts them into MDX files.
 
-## 前提条件
+## Prerequisites
 
-- 環境変数 `GEMINI_API_KEY` が設定されていること（プロジェクトルートの `.env.local` に記述すればスクリプトが自動読み込み）
-- `@google/genai` パッケージがインストールされていること（なければ `npm install --no-save @google/genai` で導入）
+- The `GEMINI_API_KEY` environment variable must be set (write it in `.env.local` at the project root and the script will auto-load it)
+- The `@google/genai` package must be installed (if not, install with `npm install --no-save @google/genai`)
 
-## ワークフロー
+## Workflow
 
-### Step 1: 情報収集
+### Step 1: Gather Information
 
-ユーザーの要求から以下を特定する：
+Identify the following from the user's request:
 
-1. **対象デッキ**: どのデッキに画像を追加するか（`decks/` 配下のディレクトリ名）
-2. **対象スライド**: どのMDXファイルに画像参照を挿入するか
-3. **画像の内容**: 何を描画するか
-4. **解像度**: デフォルト `2K`（ユーザー指定があればそれに従う）
-5. **ファイル名**: 内容を反映した英語のケバブケース（例: `hero-cityscape.png`）
+1. **Target deck**: Which deck to add the image to (directory name under `decks/`)
+2. **Target slide**: Which MDX file to insert the image reference into
+3. **Image content**: What to depict
+4. **Resolution**: Default `2K` (follow user specification if provided)
+5. **Filename**: English kebab-case reflecting the content (e.g., `hero-cityscape.png`)
 
-不足情報があれば質問して補完する。
+Ask for missing information if needed.
 
-### Step 1.5: レイアウト分析とアスペクト比の自動決定
+### Step 1.5: Layout Analysis and Automatic Aspect Ratio Selection
 
-スライドのスクリーンショットを撮影し、Claude が視覚的に分析して **最適なアスペクト比を自動決定** する。ユーザーが明示的にアスペクト比を指定した場合はそちらを優先する。
+Capture a screenshot of the slide and have Claude visually analyze it to **automatically determine the optimal aspect ratio**. If the user explicitly specifies an aspect ratio, prioritize that instead.
 
-#### 手順
+#### Procedure
 
-1. **dev サーバーが起動していることを確認**（`npm run dev`）
-2. **スクリーンショットを撮影**:
+1. **Confirm the dev server is running** (`npm run dev`)
+2. **Capture a screenshot**:
 
 ```bash
 npx tsx .claude/skills/nanobanana-image/scripts/capture-slide.ts \
@@ -52,99 +52,99 @@ npx tsx .claude/skills/nanobanana-image/scripts/capture-slide.ts \
   --output /tmp/slide-capture.png
 ```
 
-3. **キャプチャ画像を Read ツールで読み取り**、スライドのレイアウトを視覚的に分析する:
-   - 画像が配置される空白領域の幅と高さの比率を推定
-   - タイトル・テキスト・カラム配置がどれだけのスペースを占めているかを確認
-   - 画像挿入先の空間の形状（縦長・横長・正方形）を判断
+3. **Read the captured image with the Read tool** and visually analyze the slide layout:
+   - Estimate the width-to-height ratio of the empty area where the image will be placed
+   - Check how much space the title, text, and column layout occupy
+   - Determine the shape of the image insertion space (portrait, landscape, or square)
 
-4. **アスペクト比テーブルから最適なものを選択**:
+4. **Select the optimal aspect ratio from the table**:
 
-| サポートされるアスペクト比 | 数値比（幅/高さ） | 適するケース |
+| Supported Aspect Ratio | Numeric Ratio (W/H) | Suitable Cases |
 |---|---|---|
-| `9:16`  | 0.56 | 極端な縦長 |
-| `2:3`   | 0.67 | 縦長ナロー |
-| `3:4`   | 0.75 | 縦長カラム |
-| `4:5`   | 0.80 | やや縦長 |
-| `1:1`   | 1.00 | 正方形エリア |
-| `5:4`   | 1.25 | やや横長 |
-| `4:3`   | 1.33 | 標準的なカラム内配置 |
-| `3:2`   | 1.50 | 横長のカラム |
-| `16:9`  | 1.78 | 全幅・ワイドエリア |
-| `21:9`  | 2.33 | 超ワイドバナー |
+| `9:16`  | 0.56 | Extreme portrait |
+| `2:3`   | 0.67 | Narrow portrait |
+| `3:4`   | 0.75 | Portrait column |
+| `4:5`   | 0.80 | Slightly portrait |
+| `1:1`   | 1.00 | Square area |
+| `5:4`   | 1.25 | Slightly landscape |
+| `4:3`   | 1.33 | Standard in-column placement |
+| `3:2`   | 1.50 | Landscape column |
+| `16:9`  | 1.78 | Full-width / wide area |
+| `21:9`  | 2.33 | Ultra-wide banner |
 
-5. **決定根拠をユーザーに提示**:
-   - キャプチャ画像で確認した空白領域の概算サイズ
-   - 選択したアスペクト比とその理由
-   - 画像のフィット具合の説明
+5. **Present the rationale to the user**:
+   - Approximate size of the empty area confirmed in the captured image
+   - The chosen aspect ratio and reasoning
+   - Explanation of how the image will fit
 
-#### 技術詳細
+#### Technical Details
 
-- キャプチャ API: `GET /api/capture/{deck}/{slide}` — `next/og`（Satori）を使い、MDX 構造を 960x540 PNG にサーバーサイドレンダリング
-- ブラウザ不要（Playwright/Puppeteer は不要）
-- 画像・チャート等の複雑なコンポーネントはプレースホルダーボックスとして描画される
-- 日本語テキストはフォント制限により正確に表示されない場合があるが、レイアウト分析には影響なし
+- Capture API: `GET /api/capture/{deck}/{slide}` — uses `next/og` (Satori) to server-side render the MDX structure as a 960x540 PNG
+- No browser required (Playwright/Puppeteer not needed)
+- Complex components like images and charts are rendered as placeholder boxes
+- Japanese text may not render accurately due to font limitations, but this does not affect layout analysis
 
-**決定したアスペクト比と分析根拠をユーザーに提示してから生成に進む。**
+**Present the chosen aspect ratio and analysis rationale to the user before proceeding with generation.**
 
-### Step 2: プロンプト最適化
+### Step 2: Prompt Optimization
 
-ユーザーの説明をGemini画像生成に適したプロンプトに変換する：
+Convert the user's description into a prompt suitable for Gemini image generation:
 
-- **英語で記述**（Geminiは英語プロンプトで最高品質）
-- **具体的な描写を追加**: 構図、ライティング、スタイル、色調
-- **スライド用途を考慮**: テキストオーバーレイの余白、高コントラスト、シンプルな背景
-- プロンプトをユーザーに提示して確認を取る
+- **Write in English** (Gemini produces best quality with English prompts)
+- **Add specific descriptions**: Composition, lighting, style, color tone
+- **Consider slide usage**: Space for text overlay, high contrast, simple background
+- Present the prompt to the user for confirmation
 
-### Step 3: 画像生成
+### Step 3: Image Generation
 
-以下のコマンドで画像を生成する：
+Generate the image with the following command:
 
 ```bash
 npx tsx .claude/skills/nanobanana-image/scripts/generate-image.ts \
-  --prompt "<最適化されたプロンプト>" \
+  --prompt "<optimized prompt>" \
   --output "decks/<deck>/assets/<filename>.png" \
   --aspect-ratio <ratio> \
   --resolution <resolution>
 ```
 
-`@google/genai` が未インストールの場合は先にインストールする：
+If `@google/genai` is not installed, install it first:
 
 ```bash
 npm install --no-save @google/genai
 ```
 
-### Step 4: MDXに挿入
+### Step 4: Insert into MDX
 
-生成成功後、対象のMDXファイルに画像参照を挿入する：
+After successful generation, insert the image reference into the target MDX file:
 
 ```mdx
-![説明テキスト](./assets/<filename>.png)
+![Description text](./assets/<filename>.png)
 ```
 
-- `resolveAssetPaths()` が自動的に `/api/decks/<deck>/assets/<filename>.png` に変換するため、相対パス `./assets/` で記述すること
-- 挿入位置はスライドの文脈に合わせて適切な場所を選ぶ
+- `resolveAssetPaths()` automatically converts to `/api/decks/<deck>/assets/<filename>.png`, so use relative path `./assets/`
+- Choose an appropriate insertion position based on the slide context
 
-### Step 5: 結果報告
+### Step 5: Report Results
 
-ユーザーに以下を報告する：
+Report the following to the user:
 
-- 生成した画像のファイルパス
-- 使用したプロンプト
-- 挿入したMDXファイルと位置
-- devサーバーでの確認方法（`npm run dev` → 該当スライドを表示）
+- File path of the generated image
+- Prompt used
+- MDX file and position where the image was inserted
+- How to verify on the dev server (`npm run dev` then navigate to the relevant slide)
 
-## 生成スクリプトの仕様
+## Generation Script Specification
 
-| 引数 | 必須 | デフォルト | 説明 |
-|------|------|-----------|------|
-| `--prompt` | Yes | - | 画像生成プロンプト（英語推奨） |
-| `--output` | Yes | - | 出力ファイルパス（.png） |
-| `--aspect-ratio` | No | `16:9` | アスペクト比（1:1, 3:2, 4:3, 16:9, 21:9 など） |
-| `--resolution` | No | `2K` | 解像度（1K, 2K, 4K） |
+| Argument | Required | Default | Description |
+|----------|----------|---------|-------------|
+| `--prompt` | Yes | - | Image generation prompt (English recommended) |
+| `--output` | Yes | - | Output file path (.png) |
+| `--aspect-ratio` | No | `16:9` | Aspect ratio (1:1, 3:2, 4:3, 16:9, 21:9, etc.) |
+| `--resolution` | No | `2K` | Resolution (1K, 2K, 4K) |
 
-## エラーハンドリング
+## Error Handling
 
-- `GEMINI_API_KEY` 未設定 → 設定方法を案内
-- API エラー → エラーメッセージを表示して原因を説明
-- 出力先ディレクトリなし → 自動作成
-- 画像データなし（安全フィルター等） → 理由を説明してプロンプト修正を提案
+- `GEMINI_API_KEY` not set -> Guide the user on how to set it
+- API error -> Display the error message and explain the cause
+- Output directory does not exist -> Create automatically
+- No image data (safety filter, etc.) -> Explain the reason and suggest prompt modifications

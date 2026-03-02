@@ -1,8 +1,8 @@
 /**
  * extract-theme.ts
  *
- * デッキの deck.config.ts からテーマ変数を読み取り、
- * buildThemeStyle() と同じデフォルト解決を適用してJSON出力する。
+ * Reads theme variables from a deck's deck.config.ts,
+ * applies the same default resolution as buildThemeStyle(), and outputs as JSON.
  *
  * Usage:
  *   npx tsx .claude/skills/svg-diagram/scripts/extract-theme.ts --deck <deck-name>

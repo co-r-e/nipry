@@ -1,12 +1,12 @@
 ---
 name: svg-diagram
 description: |
-  SVGダイアグラム生成スキル。スライドのテーマカラー・フォントに合わせた
-  プロフェッショナルな図解（フロー、アーキテクチャ、比較、階層、サイクル等）を
-  SVGで直接生成し、デッキのassetsディレクトリに保存してMDXに挿入する。
-  テキストは最小限に抑え、ビジュアルでの分かりやすさを重視する。
-  矢印はすべて直角（orthogonal）で構成する。
-  トリガー: /svg-diagram
+  SVG diagram generation skill. Generates professional diagrams (flow, architecture,
+  comparison, hierarchy, cycle, etc.) as SVG matching the slide's theme colors and fonts,
+  saves them to the deck's assets directory, and inserts them into MDX.
+  Text is kept minimal, prioritizing visual clarity.
+  All arrows use orthogonal (right-angle) routing.
+  Trigger: /svg-diagram
 allowed-tools:
   - Bash
   - Read
@@ -16,40 +16,40 @@ allowed-tools:
   - Grep
 ---
 
-# svg-diagram スキル
+# svg-diagram Skill
 
-スライドのデザインテーマに合わせたSVGダイアグラムを生成し、MDXファイルに挿入するスキル。
-外部APIは不要 — Claude が SVG マークアップを直接生成する。
+A skill that generates SVG diagrams matching the slide's design theme and inserts them into MDX files.
+No external API required — Claude generates SVG markup directly.
 
-## ワークフロー
+## Workflow
 
-### Step 1: 情報収集
+### Step 1: Gather Information
 
-ユーザーの要求から以下を特定する：
+Identify the following from the user's request:
 
-1. **対象デッキ**: どのデッキに図を追加するか（`decks/` 配下のディレクトリ名）
-2. **対象スライド**: どのMDXファイルに図の参照を挿入するか
-3. **ダイアグラムの内容**: 何を図解するか（概念、フロー、アーキテクチャ等）
-4. **ファイル名**: 内容を反映した英語のケバブケース（例: `auth-flow.svg`, `system-architecture.svg`）
+1. **Target deck**: Which deck to add the diagram to (directory name under `decks/`)
+2. **Target slide**: Which MDX file to insert the diagram reference into
+3. **Diagram content**: What to illustrate (concept, flow, architecture, etc.)
+4. **Filename**: English kebab-case reflecting the content (e.g., `auth-flow.svg`, `system-architecture.svg`)
 
-不足情報があれば質問して補完する。
+Ask for missing information if needed.
 
-### Step 2: テーマ抽出
+### Step 2: Theme Extraction
 
-デッキのテーマカラーを取得する：
+Retrieve the deck's theme colors:
 
 ```bash
 npx tsx .claude/skills/svg-diagram/scripts/extract-theme.ts --deck <deck-name>
 ```
 
-出力されるJSONのカラー値・フォント値を、以降のSVG生成で **すべて** 使用する。
+Use **all** the color and font values from the output JSON in subsequent SVG generation.
 
-### Step 3: レイアウト分析（任意）
+### Step 3: Layout Analysis (Optional)
 
-対象スライドが指定されている場合、スライドの現在のレイアウトを確認して配置スペースを把握する：
+If a target slide is specified, check the current slide layout to understand the available placement space:
 
-1. dev サーバーが起動していることを確認（`npm run dev`）
-2. スクリーンショットを撮影：
+1. Confirm the dev server is running (`npm run dev`)
+2. Capture a screenshot:
 
 ```bash
 npx tsx .claude/skills/nanobanana-image/scripts/capture-slide.ts \
@@ -58,93 +58,93 @@ npx tsx .claude/skills/nanobanana-image/scripts/capture-slide.ts \
   --output /tmp/slide-layout.png
 ```
 
-3. キャプチャ画像を Read ツールで読み取り、空白領域のサイズ・形状を確認
-4. 分析結果に応じて viewBox サイズを調整
+3. Read the captured image with the Read tool and check the size/shape of the empty area
+4. Adjust the viewBox size based on the analysis
 
-### Step 4: ダイアグラムタイプの選択とテンプレート読み込み
+### Step 4: Select Diagram Type and Load Template
 
-ユーザーの要求内容から最適なダイアグラムタイプを判断し、対応するテンプレートファイルを **Read ツールで読み込む**。
+Determine the optimal diagram type from the user's request and **load the corresponding template file with the Read tool**.
 
-| タイプ | テンプレートファイル | 適するケース |
-|--------|---------------------|-------------|
-| フローチャート | `templates/flowchart.md` | 処理の流れ、判断分岐、ワークフロー |
-| アーキテクチャ | `templates/architecture.md` | システム構成、レイヤー構造、技術スタック |
-| プロセスフロー | `templates/process-flow.md` | 手順、ステップ、パイプライン |
-| 比較 | `templates/comparison.md` | 2〜3項目の並列比較、Before/After |
-| 階層 | `templates/hierarchy.md` | 組織図、分類ツリー、継承関係 |
-| サイクル | `templates/cycle.md` | 繰り返しプロセス、ライフサイクル、PDCA |
-| コンセプトグリッド | `templates/concept-grid.md` | 概念の列挙、特徴一覧、カテゴリ分類 |
+| Type | Template File | Suitable Cases |
+|------|---------------|----------------|
+| Flowchart | `templates/flowchart.md` | Process flows, decision branches, workflows |
+| Architecture | `templates/architecture.md` | System configurations, layer structures, tech stacks |
+| Process Flow | `templates/process-flow.md` | Procedures, steps, pipelines |
+| Comparison | `templates/comparison.md` | Side-by-side comparison of 2-3 items, Before/After |
+| Hierarchy | `templates/hierarchy.md` | Org charts, classification trees, inheritance |
+| Cycle | `templates/cycle.md` | Repeating processes, lifecycles, PDCA |
+| Concept Grid | `templates/concept-grid.md` | Concept listings, feature overviews, category classifications |
 
 ```bash
-# テンプレート読み込み（Read ツールで）
+# Load template (with Read tool)
 .claude/skills/svg-diagram/templates/<type>.md
 ```
 
-各テンプレートには完成SVGの実例コード、レイアウトルール、座標計算の詳細が含まれている。
-**テンプレートの指示に厳密に従い**、後述の「SVG生成ガイドライン（共通）」と組み合わせてSVGを生成する。
+Each template contains complete SVG examples, layout rules, and detailed coordinate calculations.
+**Follow the template instructions strictly** and combine them with the "SVG Generation Guidelines (Common)" below to generate the SVG.
 
-### Step 5: SVG生成
+### Step 5: SVG Generation
 
-テンプレートと共通ガイドラインに従い、SVGを生成する。
-Write ツールで以下に出力：
+Generate the SVG following the template and common guidelines.
+Output with the Write tool to:
 
 ```
 decks/<deck>/assets/<filename>.svg
 ```
 
-### Step 6: MDXに挿入
+### Step 6: Insert into MDX
 
-対象のMDXファイルに画像参照を挿入する：
+Insert the image reference into the target MDX file:
 
 ```mdx
-![説明テキスト](./assets/<filename>.svg)
+![Description text](./assets/<filename>.svg)
 ```
 
-- `resolveAssetPaths()` が自動的に `/api/decks/<deck>/assets/<filename>.svg` に変換する
-- 挿入位置はスライドの文脈に合わせて適切な場所を選ぶ
+- `resolveAssetPaths()` automatically converts to `/api/decks/<deck>/assets/<filename>.svg`
+- Choose an appropriate insertion position based on the slide context
 
-### Step 7: 結果報告
+### Step 7: Report Results
 
-ユーザーに以下を報告する：
+Report the following to the user:
 
-- 生成したSVGのファイルパス
-- ダイアグラムの種類とサイズ
-- 使用したテーマカラー
-- devサーバーでの確認方法（`npm run dev` → 該当スライドを表示）
+- File path of the generated SVG
+- Diagram type and size
+- Theme colors used
+- How to verify on the dev server (`npm run dev` then navigate to the relevant slide)
 
 ---
 
-## SVG生成ガイドライン（共通）
+## SVG Generation Guidelines (Common)
 
-以下は全ダイアグラムタイプに共通するルール。タイプ固有のルールはテンプレートファイルに記載されている。
+The following are rules common to all diagram types. Type-specific rules are documented in the template files.
 
-### 1. キャンバス設定
+### 1. Canvas Setup
 
 ```xml
 <svg xmlns="http://www.w3.org/2000/svg" width="960" height="540" viewBox="0 0 960 540">
 ```
 
-| 用途 | viewBox | 備考 |
-|------|---------|------|
-| フルワイド図 | `0 0 960 540` | 16:9、スライドと同比率 |
-| カラム内図（50%幅） | `0 0 480 540` | 半幅 |
-| 正方形図 | `0 0 600 600` | 1:1 |
-| 縦長図 | `0 0 640 720` | ポートレート |
+| Use Case | viewBox | Notes |
+|----------|---------|-------|
+| Full-width diagram | `0 0 960 540` | 16:9, same ratio as slide |
+| In-column diagram (50% width) | `0 0 480 540` | Half width |
+| Square diagram | `0 0 600 600` | 1:1 |
+| Portrait diagram | `0 0 640 720` | Portrait |
 
-- 外部パディング: **48px**（全辺）
-- 使用可能領域: 864 x 444（48,48 から 912,492）
+- Outer padding: **48px** (all sides)
+- Usable area: 864 x 444 (from 48,48 to 912,492)
 
-### 2. グリッドシステム
+### 2. Grid System
 
-24pxグリッドに全要素をスナップさせる。
+Snap all elements to a 24px grid.
 
-- **ノード間隔**: 最低 48px（グリッド2単位）
-- **矢印とノードの間隙**: 12px
-- **ノード内テキストパディング**: 水平16px、垂直12px
+- **Node spacing**: Minimum 48px (2 grid units)
+- **Gap between arrows and nodes**: 12px
+- **Text padding inside nodes**: Horizontal 16px, vertical 12px
 
-### 3. ノード描画
+### 3. Node Drawing
 
-#### 標準ノード（デフォルト）
+#### Standard Node (Default)
 
 ```xml
 <g transform="translate(x, y)">
@@ -152,33 +152,33 @@ decks/<deck>/assets/<filename>.svg
         fill="{surface}" stroke="{border}" stroke-width="1.5"/>
   <text x="{W/2}" y="{H/2}" text-anchor="middle" dominant-baseline="central"
         font-family="{fontHeading}" font-size="18" font-weight="600" fill="{text}">
-    ラベル
+    Label
   </text>
 </g>
 ```
 
-#### 強調ノード（primary）
+#### Emphasis Node (primary)
 
 ```xml
 <rect ... fill="{primary}" stroke="none"/>
-<text ... fill="#FFFFFF" font-weight="700">キーワード</text>
+<text ... fill="#FFFFFF" font-weight="700">Keyword</text>
 ```
 
-#### アクセントノード（軽い強調）
+#### Accent Node (light emphasis)
 
 ```xml
 <rect ... fill="{primary}15" stroke="{primary}" stroke-width="1.5"/>
-<text ... fill="{primary}">サブ項目</text>
+<text ... fill="{primary}">Sub-item</text>
 ```
 
-**ノード共通ルール**:
-- 最小幅: 120px
-- 最小高さ: 56px
-- 角丸: `rx="12"`
-- 同じ階層のノードは同一サイズで統一
-- テキストがはみ出さないようノードサイズを調整
+**Common Node Rules**:
+- Minimum width: 120px
+- Minimum height: 56px
+- Border radius: `rx="12"`
+- Nodes at the same level should have uniform size
+- Adjust node size to prevent text overflow
 
-#### グループ背景（レイヤー等）
+#### Group Background (layers, etc.)
 
 ```xml
 <rect x="x" y="y" width="W" height="H" rx="16"
@@ -186,15 +186,15 @@ decks/<deck>/assets/<filename>.svg
       opacity="0.5"/>
 <text x="{x+16}" y="{y+24}" font-family="{fontBody}" font-size="14"
       font-weight="600" fill="{textMuted}">
-  グループ名
+  Group Name
 </text>
 ```
 
-### 4. 矢印描画（直角 / orthogonal のみ）
+### 4. Arrow Drawing (orthogonal / right-angle only)
 
-**最重要ルール: 曲線・斜線は一切使わない。すべて水平線(H)と垂直線(V)の組み合わせ。**
+**Most important rule: No curves or diagonal lines. All connections use horizontal (H) and vertical (V) segments only.**
 
-#### マーカー定義（SVGの冒頭に1回だけ記述）
+#### Marker Definition (written once at the beginning of the SVG)
 
 ```xml
 <defs>
@@ -209,121 +209,121 @@ decks/<deck>/assets/<filename>.svg
 </defs>
 ```
 
-#### 矢印パスパターン
+#### Arrow Path Patterns
 
-**水平→垂直（L字）**:
+**Horizontal then Vertical (L-shape)**:
 ```xml
 <path d="M {x1} {y1} H {midX} V {y2}" fill="none"
       stroke="{textMuted}" stroke-width="1.5" marker-end="url(#arrow)"/>
 ```
 
-**水平→垂直→水平（Z字）**:
+**Horizontal then Vertical then Horizontal (Z-shape)**:
 ```xml
 <path d="M {x1} {y1} H {midX} V {y2} H {x2}" fill="none"
       stroke="{textMuted}" stroke-width="1.5" marker-end="url(#arrow)"/>
 ```
 
-**垂直→水平（L字）**:
+**Vertical then Horizontal (L-shape)**:
 ```xml
 <path d="M {x1} {y1} V {midY} H {x2}" fill="none"
       stroke="{textMuted}" stroke-width="1.5" marker-end="url(#arrow)"/>
 ```
 
-#### ルーティングルール
+#### Routing Rules
 
-1. 矢印はノードの辺の中心から出入りする（右辺中央、左辺中央、上辺中央、下辺中央）
-2. 折れ曲がりは1回（L字）か2回（Z字）のみ
-3. 他のノードを貫通する矢印は禁止 — 迂回させる
-4. 平行する矢印は最低 24px 間隔を空ける
-5. 同一ノードから複数矢印が出る場合は 16px 間隔で分散
+1. Arrows enter and exit from the center of node edges (right center, left center, top center, bottom center)
+2. Bends are limited to 1 (L-shape) or 2 (Z-shape) turns
+3. Arrows must not pass through other nodes — reroute them
+4. Parallel arrows must be spaced at least 24px apart
+5. Multiple arrows from the same node should be distributed with 16px spacing
 
-#### 方向の規約
+#### Direction Conventions
 
-| ダイアグラムタイプ | フロー方向 | 矢印出口 → 入口 |
+| Diagram Type | Flow Direction | Arrow Exit -> Entry |
 |---|---|---|
-| フローチャート | 上 → 下 | 下辺 → 上辺 |
-| アーキテクチャ | 左 → 右 | 右辺 → 左辺 |
-| プロセスフロー | 左 → 右 | 右辺 → 左辺 |
-| サイクル | 時計回り | 適切な辺を選択 |
+| Flowchart | Top -> Bottom | Bottom edge -> Top edge |
+| Architecture | Left -> Right | Right edge -> Left edge |
+| Process Flow | Left -> Right | Right edge -> Left edge |
+| Cycle | Clockwise | Select appropriate edges |
 
-#### 矢印ラベル（任意）
+#### Arrow Labels (optional)
 
 ```xml
 <text x="{midX}" y="{midY - 8}" text-anchor="middle"
       font-family="{fontBody}" font-size="13" fill="{textMuted}">
-  ラベル
+  Label
 </text>
 ```
 
-### 5. テーマカラーマッピング
+### 5. Theme Color Mapping
 
-extract-theme.ts の出力JSONからの値を以下のように適用する：
+Apply values from the extract-theme.ts output JSON as follows:
 
-| SVG要素 | テーマ変数 | 用途 |
-|---------|-----------|------|
-| 標準ノード背景 | `surface` | デフォルトのボックス背景 |
-| 標準ノード枠線 | `border` | デフォルトのボックス枠 |
-| 強調ノード背景 | `primary` | キーとなるボックス |
-| 強調ノードテキスト | `#FFFFFF` | 白テキスト |
-| アクセントノード背景 | `{primary}15` | 10%透過の軽い強調 |
-| アクセントノード枠線 | `primary` | アクセント枠 |
-| 矢印線 | `textMuted` | 接続線 |
-| 矢印ラベル | `textMuted` | 小さな説明テキスト |
-| メインラベル | `text` | ノード内テキスト |
-| サブラベル | `textMuted` | 補足テキスト |
-| グループ背景 | `surfaceAlt` | レイヤー区分の背景 |
-| グループ枠線 | `border` + 点線 | グループの境界 |
+| SVG Element | Theme Variable | Usage |
+|-------------|---------------|-------|
+| Standard node background | `surface` | Default box background |
+| Standard node border | `border` | Default box border |
+| Emphasis node background | `primary` | Key boxes |
+| Emphasis node text | `#FFFFFF` | White text |
+| Accent node background | `{primary}15` | 10% transparent light emphasis |
+| Accent node border | `primary` | Accent border |
+| Arrow lines | `textMuted` | Connecting lines |
+| Arrow labels | `textMuted` | Small description text |
+| Main labels | `text` | Text inside nodes |
+| Sub-labels | `textMuted` | Supplementary text |
+| Group background | `surfaceAlt` | Layer section background |
+| Group border | `border` + dashed | Group boundary |
 
-**透過色の指定方法**: HEXカラーの末尾に2桁を追加する。
-- 10% → `{color}1A`
-- 15% → `{color}26`
-- 20% → `{color}33`
-- 50% → `{color}80`
+**How to specify transparent colors**: Append 2 hex digits to the end of a HEX color.
+- 10% -> `{color}1A`
+- 15% -> `{color}26`
+- 20% -> `{color}33`
+- 50% -> `{color}80`
 
-### 6. タイポグラフィ
+### 6. Typography
 
-- **ノードラベル**: `font-family="{fontHeading}"`, `font-size="16"〜"18"`, `font-weight="600"`
-- **サブラベル**: `font-family="{fontBody}"`, `font-size="13"〜"14"`, `font-weight="400"`
-- **ダイアグラムタイトル**（付ける場合）: `font-size="22"〜"24"`, `font-weight="700"`
-- **矢印ラベル**: `font-size="13"`, `fill="{textMuted}"`
-- **最小フォントサイズ**: 13px（これ以下は不可）
-- すべての `<text>` 要素に `font-family`, `font-size`, `font-weight`, `fill` を明示的に指定する（SVGはCSS変数を継承しない）
+- **Node labels**: `font-family="{fontHeading}"`, `font-size="16"-"18"`, `font-weight="600"`
+- **Sub-labels**: `font-family="{fontBody}"`, `font-size="13"-"14"`, `font-weight="400"`
+- **Diagram title** (if included): `font-size="22"-"24"`, `font-weight="700"`
+- **Arrow labels**: `font-size="13"`, `fill="{textMuted}"`
+- **Minimum font size**: 13px (nothing smaller allowed)
+- Explicitly specify `font-family`, `font-size`, `font-weight`, and `fill` on all `<text>` elements (SVG does not inherit CSS variables)
 
-### 7. デザイン原則
+### 7. Design Principles
 
-- **テキストは最小限**: ノードラベルは1〜4語に収める。説明文はスライドのテキストに任せる
-- **ビジュアル優先**: 色分け・矢印・配置で関係性を表現する
-- **余計な装飾は不要**: グラデーション、ドロップシャドウ、装飾的な図形は使わない（シンプルなflatデザイン）
-- **色は3〜4色まで**: primary + surface + textMuted + 1アクセントで十分
-- **背景は透明**: SVG自体に背景 `<rect>` は付けない（スライド背景に任せる）
+- **Minimal text**: Keep node labels to 1-4 words. Leave explanatory text to the slide
+- **Visual-first**: Express relationships through color coding, arrows, and layout
+- **No unnecessary decoration**: No gradients, drop shadows, or decorative shapes (simple flat design)
+- **Limit to 3-4 colors**: primary + surface + textMuted + 1 accent is sufficient
+- **Transparent background**: Do not add a background `<rect>` to the SVG itself (let the slide background show through)
 
-### 8. 品質チェックリスト
+### 8. Quality Checklist
 
-SVGファイルを書き出す前に以下を確認する：
+Verify the following before writing the SVG file:
 
-- [ ] **整列**: 同じ階層のノードは同一座標軸上に揃っている
-- [ ] **一貫性**: 同タイプのノードが同サイズ・同スタイルである
-- [ ] **等間隔**: ノード間のスペースが均一である
-- [ ] **重なりなし**: ノード同士、ノードと矢印が重なっていない
-- [ ] **矢印が直角**: すべての接続線が水平・垂直のみで構成されている
-- [ ] **読みやすさ**: テキストが13px以上で、ノードラベルが4語以内
-- [ ] **色の調和**: 使用色が4色以内、すべてテーマ変数から取得
-- [ ] **視覚バランス**: 図がviewBox内でほぼ中央に配置されている
-- [ ] **パディング**: 外周48pxの安全領域を確保している
+- [ ] **Alignment**: Nodes at the same level are aligned on the same coordinate axis
+- [ ] **Consistency**: Nodes of the same type have the same size and style
+- [ ] **Equal spacing**: Spacing between nodes is uniform
+- [ ] **No overlap**: No nodes overlap each other or overlap with arrows
+- [ ] **Right-angle arrows**: All connecting lines consist of horizontal and vertical segments only
+- [ ] **Readability**: Text is 13px or larger and node labels are 4 words or fewer
+- [ ] **Color harmony**: No more than 4 colors used, all from theme variables
+- [ ] **Visual balance**: The diagram is roughly centered within the viewBox
+- [ ] **Padding**: 48px safe area is maintained around the perimeter
 
-## エラーハンドリング
+## Error Handling
 
-- `extract-theme.ts` がデッキを見つけられない → デッキ名を確認してリトライ
-- `deck.config.ts` にテーマ設定がない → エラーメッセージを表示
-- SVG出力先ディレクトリがない → `decks/{deck}/assets/` を作成してから書き出す
+- `extract-theme.ts` cannot find the deck -> Verify the deck name and retry
+- `deck.config.ts` has no theme settings -> Display an error message
+- SVG output directory does not exist -> Create `decks/{deck}/assets/` before writing
 
-## ファイル命名規約
+## File Naming Convention
 
 ```
-{主題}-{ダイアグラムタイプ}.svg
+{subject}-{diagram-type}.svg
 ```
 
-例:
+Examples:
 - `auth-flow.svg`
 - `system-architecture.svg`
 - `deploy-process.svg`
@@ -332,8 +332,8 @@ SVGファイルを書き出す前に以下を確認する：
 - `dev-cycle.svg`
 - `feature-overview.svg`
 
-ルール:
-- すべて小文字の英語
-- 単語区切りはハイフン
-- 最大40文字
-- `diagram.svg` や `chart.svg` のような汎用名は禁止
+Rules:
+- All lowercase English
+- Words separated by hyphens
+- Maximum 40 characters
+- Generic names like `diagram.svg` or `chart.svg` are prohibited

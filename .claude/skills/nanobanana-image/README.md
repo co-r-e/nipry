@@ -1,42 +1,42 @@
 # nanobanana-image
 
-Gemini API を使ってスライド用の画像を生成する Claude Code スキル。
+A Claude Code skill for generating slide images using the Gemini API.
 
-## セットアップ
+## Setup
 
-### 1. Gemini API キーを取得
+### 1. Obtain a Gemini API Key
 
-[Google AI Studio](https://aistudio.google.com/apikey) からAPIキーを取得する。
+Get an API key from [Google AI Studio](https://aistudio.google.com/apikey).
 
-### 2. APIキーを設定
+### 2. Configure the API Key
 
-`.env.example` をコピーして `.env.local` を作成し、APIキーを記入する：
+Copy `.env.example` to create `.env.local` and enter the API key:
 
 ```bash
 cp .env.example .env.local
 ```
 
-`.env.local` は `.gitignore` に含まれているため、キーがリポジトリにコミットされることはない。
+`.env.local` is included in `.gitignore`, so the key will never be committed to the repository.
 
-### 3. 依存パッケージをインストール
+### 3. Install Dependencies
 
 ```bash
 npm install --no-save @google/genai
 ```
 
-`--no-save` により `package.json` は変更されない。
+`--no-save` ensures `package.json` is not modified.
 
-## 使い方
+## Usage
 
-Claude Code で以下のように呼び出す：
+Invoke in Claude Code as follows:
 
 ```
-/nanobanana-image サンプルデッキに未来都市の画像を追加して
+/nanobanana-image Add a futuristic city image to the sample deck
 ```
 
-スキルが自動的にプロンプトを最適化し、画像を生成してMDXファイルに挿入する。
+The skill will automatically optimize the prompt, generate the image, and insert it into the MDX file.
 
-## スクリプト単体での実行
+## Running the Script Standalone
 
 ```bash
 npx tsx .claude/skills/nanobanana-image/scripts/generate-image.ts \
@@ -46,9 +46,9 @@ npx tsx .claude/skills/nanobanana-image/scripts/generate-image.ts \
   --resolution 2K
 ```
 
-| 引数 | 必須 | デフォルト | 説明 |
-|------|------|-----------|------|
-| `--prompt` | Yes | - | 画像生成プロンプト（英語推奨） |
-| `--output` | Yes | - | 出力パス（.png） |
-| `--aspect-ratio` | No | `16:9` | アスペクト比 |
-| `--resolution` | No | `2K` | 解像度（1K / 2K / 4K） |
+| Argument | Required | Default | Description |
+|----------|----------|---------|-------------|
+| `--prompt` | Yes | - | Image generation prompt (English recommended) |
+| `--output` | Yes | - | Output path (.png) |
+| `--aspect-ratio` | No | `16:9` | Aspect ratio |
+| `--resolution` | No | `2K` | Resolution (1K / 2K / 4K) |
